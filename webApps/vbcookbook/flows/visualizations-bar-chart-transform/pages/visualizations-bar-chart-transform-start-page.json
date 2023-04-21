@@ -1,0 +1,32 @@
+{
+  "title": "Chart With Transform Recipe",
+  "description": "",
+  "variables": {
+    "transformedDataADP": {
+      "type": "vb/ArrayDataProvider2"
+    }
+  },
+  "metadata": {},
+  "types": {},
+  "chains": {},
+  "eventListeners": {
+    "vbEnter": {
+      "chains": [
+        {
+          "chainId": "fetchDataFromService",
+          "parameters": {}
+        }
+      ]
+    }
+  },
+  "imports": {
+    "components": {
+      "oj-chart": {
+        "path": "ojs/ojchart"
+      },
+      "oj-chart-item": {
+        "path": "ojs/ojchart"
+      }
+    }
+  }
+}

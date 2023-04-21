@@ -1,0 +1,107 @@
+{
+  "title": "Table Drag and Drop Recipe",
+  "description": "",
+  "variables": {
+    "employeeDropListADP": {
+      "type": "vb/ArrayDataProvider2",
+      "defaultValue": {
+        "itemType": "get_Employee",
+        "keyAttributes": [
+          "id"
+        ]
+      }
+    },
+    "employeeListSDP": {
+      "type": "vb/ServiceDataProvider",
+      "defaultValue": {
+        "endpoint": "businessObjects/getall_Employee",
+        "keyAttributes": "id",
+        "itemsPath": "items",
+        "responseType": "page:getallEmployeeResponse"
+      }
+    }
+  },
+  "metadata": {},
+  "types": {
+    "@decorators.get_Employee": {
+      "endpoint": "get_Employee",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "@decorators.getallEmployeeResponse": {
+      "endpoint": "getall_Employee",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "get_Employee": {
+      "departmentObject": {
+        "items": [
+          {
+            "departmentName": "string"
+          }
+        ]
+      },
+      "firstName": "string",
+      "id": "number",
+      "jobObject": {
+        "items": [
+          {
+            "jobTitle": "string"
+          }
+        ]
+      },
+      "phoneNumber": "string"
+    },
+    "getallEmployeeResponse": {
+      "items": [
+        {
+          "departmentObject": {
+            "items": [
+              {
+                "departmentName": "string"
+              }
+            ]
+          },
+          "firstName": "string",
+          "id": "number",
+          "jobObject": {
+            "items": [
+              {
+                "jobTitle": "string"
+              }
+            ]
+          },
+          "phoneNumber": "string"
+        }
+      ]
+    }
+  },
+  "chains": {},
+  "eventListeners": {
+    "dataDropped": {
+      "chains": [
+        {
+          "chainId": "handleDrop",
+          "parameters": {
+            "event": "{{ $event }}"
+          }
+        }
+      ]
+    }
+  },
+  "imports": {
+    "components": {
+      "oj-table": {
+        "path": "ojs/ojtable"
+      }
+    }
+  },
+  "events": {
+    "dataDropped": {
+      "payloadType": {
+        "rows": "object[]",
+        "startIndex": "number"
+      }
+    }
+  }
+}

@@ -1,0 +1,552 @@
+<!--
+ Copyright (c)2020, 2023, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+<div class="oj-flex">
+  <p>
+    A Select Single component displays an employee list of values. An Icon component with an event
+    listener opens a Dialog component where the user searches for an employee record. An action
+    chain assigns search criteria to <code>employeeListSDP.filterCriterion</code>.
+    A Table component with filtered row(s) displays with an event listener that assigns the user-selected row to <code>selectedEmployee</code> variable. An OK button is enabled
+    with an event listener to close the dialog. A Cancel button with an event listener resets the <code>selectedEmployee</code> to default and closes the dialog. A Reset button
+    with an event listener resets <code>filters</code> and the <code>employeeListSDP.filterCriterion</code> variable.
+  </p>
+</div>
+
+<!-- Step 1. -->
+<div class="oj-flex">
+  <oj-accordion class="oj-flex-item oj-sm-12 oj-md-12" multiple="true">
+    <oj-collapsible id="step1" expanded="true">
+      <span slot="header">Create a Select Single Component to Display an Employee List of Values</span>
+      <div>
+        <p>You add a Select Single component to your page, bind it to employee data,
+          add a label bound to the employee name, and finally add a delete icon that
+          deletes the selected employee and shows the Select Single component. </p>
+        <ol>
+          <li>Create a variable named <code>selectedEmployee</code> of type Object.
+          </li>
+          <li>
+            Create a page function named <code>optionRenderer</code>:
+            <br>
+<pre>PageModule.prototype.optionRenderer = function(context) {
+    return context.data.firstName + ' ' + context.data.lastName
+  }</pre>
+          </li>
+          <li>
+            In the Component Palette, drag the If component and drop it on the page. In the Property
+            Inspector, set the Test field value to <code>[[ !$variables.selectedEmployee.key ]]</code>.
+          </li>
+          <li>
+            In the Component Palette, drag the Select Single component and drop it on the page.
+          </li>
+          <li>
+            Use the Select Single component’s <a target="_blank" href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/design-pages.html#GUID-34A69EF1-56C0-462A-83FB-D3F5948CFA3D">Add
+                Data Quick Start</a> to bind your Select Single component to employee data.</li>
+
+
+          <li>In the Bind Data page, select the following employee fields in the given
+            sequence:
+            <ul>
+              <li>First Name for Label</li>
+              <li>Id for Value</li>
+              <li>Last Name to include in row data</li>
+
+            </ul>
+          </li>
+          <li>In the Select Single component's Properties pane:
+            <ul>
+              <li>
+                In the General tab, assign Employee to the Label Text (Label) field.
+              </li>
+              <li>
+                In the Data Tab, assign the Value field to <code>{{ $variables.selectedEmployee }}</code>.
+              </li>
+              <li>
+                In the All Tab, under Select Single Attributes, set option-renderer to <code>[[$page.functions.optionRenderer]]</code>.
+                This function displays the employee's first name and last name together in the Select Single component.
+              </li>
+            </ul>
+          </li>
+
+          <li>
+            When the user selects an employee from the Select Single component, we need to hide the component using a
+            condition and display a label with the selected employee name. An icon adjacent
+            to the label is used to hide the label and to display the Select Single component again.
+
+          </li>
+
+
+          <li>
+            In the Component Palette, drag an If component (oj-bind-if) and drop it on the page. In the Property
+            Inspector of the If component, assign the Test field to <code>[[ $variables.selectedEmployee.value ]]</code>.
+          </li>
+          <li>
+            In the Component Palette, drag a Label component and drop it on the page. In the Properties pane
+            of the Label component, assign the Text field to <code>[[ $variables.selectedEmployee.label]]</code>.
+          </li>
+          <li>
+            In the Component Palette, drag an Icon component and drop it on the page adjacent to the label.
+            In the Properties pane of the Icon component:
+            <ul>
+              <li>
+                In the General tab, select the Delete icon from the Gallery.
+              </li>
+              <li>
+                <a target="_blank" href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/work-actions-and-action-chains.html#GUID-69C60635-B452-44B0-BC7C-ABA147B63314">Add
+                an event listener</a> to the Icon component.
+              </li>
+              <li>
+                <a target="_blank" href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/work-actions-and-action-chains.html#GUID-E87B6675-D7E4-49BC-B4E4-2B477FBE4B8D">Add an Assign Variables action</a> to the action chain named <code>DeSelectEmployeeChain</code> that assigns the
+                <code>selectedEmployee</code> variable in target to Default.
+              </li>
+            </ul>
+
+          </li>
+
+
+        </ol>
+      </div>
+    </oj-collapsible>
+
+    <oj-collapsible id="step2">
+      <span slot="header">Create a Dialog to Display Advanced Search</span>
+      <div>
+        <p> You'll need to create an icon adjacent to the Select Single component which opens a dialog
+          that will be used to add advanced search and display filtered employee record(s).
+        </p>
+        <ol>
+          <li>
+            In the Component Palette, drag an Icon component and drop it on the page.
+          </li>
+          <li>
+            In the Properties pane of the Icon component:
+            <ul>
+              <li>
+                In the General tab, select the "Search Magnifying Glass" icon from the Gallery.
+              </li>
+              <li>
+                Add an Event Listener to the Icon component.
+              </li>
+              <li>
+                Add a Call Component action named <code>openDialogComponentMethod</code>                to the action chain named <code>OpenAdvancedSearchDialog</code>.
+              </li>
+              <li>
+                In the Properties pane of the Call Component action, select <b>oj-dialog</b> from the Component dropdown list and <b>open</b> from the Method Name dropdown list.
+              </li>
+
+
+
+
+            </ul>
+          </li>
+        </ol>
+      </div>
+    </oj-collapsible>
+
+    <oj-collapsible id="step3">
+      <span slot="header">Add an Employee Table to the Dialog</span>
+      <div>
+        <p>You'll need to add a Table component to display the list of filtered employees
+          displayed from the advanced search which we'll create in the next section.</p>
+        <ol>
+          <li>
+            Create a variable named <code>selectedRow</code> of type Object. Add a field
+            <code>key</code> of type String to the variable.
+          </li>
+          <li>
+            Add the following code to the <code>PageModule</code> function:
+            <br>
+<pre>this.inrNumberConverter =
+new NumberConverter.IntlNumberConverter({
+  "options": {
+    "style": "currency",
+    "currency": "INR"
+  },
+  "type": "number"
+});</pre>
+          </li>
+          <li>
+            Add a function named <code>formatCurrency</code> for formatting currency.
+            <br>
+<pre>PageModule.prototype.formatCurrency = function(data) {
+  return this.inrNumberConverter.format(data);
+};</pre>
+          </li>
+          <li>
+            In the Component Palette, drag a Table component and drop it to dialog.
+          </li>
+          <li>Use the Table component’s <a target="_blank" href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/design-pages.html#GUID-34A69EF1-56C0-462A-83FB-D3F5948CFA3D">Add
+                Data Quick Start</a> to bind your table to employee data.</li>
+          <li>In the Bind Data page, select the following employee fields:
+            <ul>
+              <li>First Name</li>
+              <li>Last Name</li>
+              <li>Department Name</li>
+              <li>Skill Name</li>
+              <li>Salary</li>
+            </ul>
+          </li>
+          <li>
+            In the Properties pane of the Table component:
+            <ul>
+              <li>
+                In the Data tab, assign the First Selected Row to <code>{{ $variables.selectedRow}}</code>.
+              </li>
+              <li>
+                <a target="_blank" href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/work-actions-and-action-chains.html#GUID-69C60635-B452-44B0-BC7C-ABA147B63314">Add
+                an event listener</a> with a select event of first-selected-row
+                to the Table component.
+              </li>
+              <li>
+                Add the following actions to the action chain named <code>TableFirstSelectedRowChangeChain</code>:
+                <ul>
+                  <li>
+                    <a target="_blank" href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/work-actions-and-action-chains.html#GUID-E87B6675-D7E4-49BC-B4E4-2B477FBE4B8D">Add
+                an Assign Variables action</a> with the <code>selectEmployee</code>                    variable set to default in Target.                  </li>
+                  <li>
+                    Add an If action named <code>tableRowDataIf</code>. In the Property
+                    Inspector of the If action, assign the Condition field to <code>[[ $chain.variables.rowData ]]</code>.
+                  </li>
+
+                  <li>
+                    For the true section of the If condition, <a target="_blank" href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/work-actions-and-action-chains.html#GUID-E87B6675-D7E4-49BC-B4E4-2B477FBE4B8D">add
+                an Assign Variables action</a> with the Target <code>selectEmployee</code>                    variable set to
+                    <br>
+<pre>{
+ "data": {
+  "firstName": "{{$page.variables.selectedRow.data.firstName}}",
+  "id": "{{$page.variables.selectedRow.key}}",
+  "lastName": "{{$page.variables.selectedRow.data.lastName}}"
+ },
+ "metadata": {
+  "key": "{{$page.variables.selectedRow.key}}"
+ },
+ "key": "{{$page.variables.selectedRow.key}}"
+}  </pre>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                In the Component Palette, drag a Radio Button Set component (oj-radioset) and drop it in the first column of the table as a cell template. In
+                the Properties pane of the Radio Button Set component, set Value to <code>[[$current.row.id === $page.variables.selectedRow.key ]]</code>.
+                Create one oj-option with an empty label value and Value set to <code>[[true]]</code>.
+              </li>
+            </ul>
+          </li>
+          <li>
+            In the Component Palette, drag a Button component and drop it on the Dialog component.
+          </li>
+          <li>
+            In the Properties pane of the  Button component:
+            <ul>
+              <li>
+                In the General tab, set Text to <b>OK</b> and Disabled to <code>[[ !$variables.selectedEmployee.value ]]</code>.
+              </li>
+              <li>
+                <a target="_blank" href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/work-actions-and-action-chains.html#GUID-69C60635-B452-44B0-BC7C-ABA147B63314">Add
+                an event listener</a>.
+              </li>
+              <li>
+                In the action chain named <code>OKButtonActionChain</code>, <a target="_blank"
+                  href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/work-actions-and-action-chains.html#GUID-D8DBF495-6C44-4311-9AC9-F575CE65F869">add
+                a Call Component action</a> named <code>closeDialogComponentMethod</code>.
+              </li>
+              <li>In the Properties pane, select the <strong>oj-dialog</strong> component
+                from the Component dropdown list and
+                <strong>close</strong> from the Method Name dropdown list.</li>
+
+            </ul>
+
+          </li>
+          <li>
+            In the Component Palette, drag a Button component and drop it on the Dialog.
+          </li>
+          <li>
+            In the Properties pane of the Button component:
+            <ul>
+              <li>
+                In the General tab, set Text to <b>Cancel</b>.
+              </li>
+              <li>
+                <a target="_blank" href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/work-actions-and-action-chains.html#GUID-69C60635-B452-44B0-BC7C-ABA147B63314">Add
+                an event listener</a>.
+              </li>
+              <li>
+                In the action chain named <code>CancelButtonActionChain</code>:
+                <ul>
+                  <li>
+                    <a target="_blank" href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/work-actions-and-action-chains.html#GUID-E87B6675-D7E4-49BC-B4E4-2B477FBE4B8D">Add
+                an Assign Variables action</a> with Target <code>selectEmployee</code>                    variable set to default.
+                  </li>
+                  <li>
+                    <a target="_blank" href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/work-actions-and-action-chains.html#GUID-D8DBF495-6C44-4311-9AC9-F575CE65F869">Add
+                a Call Component
+                action</a> named <code>closeDialogComponentMethod</code>.
+                    In the Properties pane, select the <strong>oj-dialog</strong>                    component from the Component dropdown list and
+                    <strong>close</strong> from the Method Name dropdown list.</li>
+
+                </ul>
+
+              </li>
+
+            </ul>
+          </li>
+
+        </ol>
+      </div>
+    </oj-collapsible>
+
+    <oj-collapsible id="step4">
+      <span slot="header">Add an Advanced Search Dialog</span>
+      <div>
+        <p>You'll need to add an Advanced Search dialog to allow users to filter employees and select one of them. </p>
+        <ol>
+          <li>
+            <a target="_blank" href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/work-variables-and-types.html#GUID-B2337AFE-0FE9-4E44-89DF-AA497883BD44">Create
+                a custom type</a> named <code>filter</code> of type Object with the following fields:
+            <ul>
+              <li>
+                <code>attribute</code> of type String
+              </li>
+              <li>
+                <code>attribute</code> of type String
+              </li>
+              <li>
+                <code>of type Any</code>
+              </li>
+            </ul>
+          </li>
+          <li>
+            Create a variable named <code>filters</code> of type Array and Array
+            Items Type <code>filters</code>
+          </li>
+          <li>
+            Set the Default value of <code>filters</code> variable to:
+            <br>
+<pre>[
+  {
+      "op": "$sw",
+      "attribute": "firstName",
+      "value": ""
+  },
+  {
+      "op": "$sw",
+      "attribute": "lastName",
+      "value": ""
+  },
+  {
+      "op": "$eq",
+      "attribute": "departmentObject.id",
+      "value": null
+  },
+  {
+      "op": "$eq",
+      "attribute": "skillCollection.id",
+      "value": []
+  },
+  {
+      "op": "$ge",
+      "attribute": "salary",
+      "value": null
+  },
+  {
+      "op": "$le",
+      "attribute": "salary",
+      "value": null
+  }
+]</pre>
+          </li>
+          <li>
+            Create a function named <code>mapToCriteria</code>:
+            <br>
+<pre>PageModule.prototype.mapToCriteria = function(filters) {
+  var criteria = [];
+  filters.filter(f =&gt; {
+    if (Array.isArray(f.value) &amp;&amp; f.value.length &gt; 0) {
+      return true;
+    } else if (typeof f.value === 'string' &amp;&amp; f.value) {
+      return true;
+    } else if (typeof f.value === 'number' &amp;&amp; f.value !== null) {
+      return true;
+    } else {
+      return false;
+    }
+  }).forEach(f =&gt; {
+    if (Array.isArray(f.value)) {
+      var arrayCriteria = [];
+      f.value.forEach(val =&gt; {
+        arrayCriteria.push({
+          op: f.op,
+          attribute: f.attribute,
+          value: val
+        })
+      })
+      criteria.push({
+        op: '$or',
+        criteria: arrayCriteria
+      })
+    } else if (f.value) {
+      criteria.push(f)
+    }
+  });
+  return criteria;
+};</pre>
+          </li>
+          <li>
+            In the Component Palette, drag a Panel component and drop it on the dialog.
+          </li>
+          <li>
+            In the Component Palette, drag a Form Layout component and drop it on the Dialog inside
+            Panel. Set the Max Columns 2.
+
+          </li>
+          <li>
+            In the Component Palette, drag an Input Text component and drop it on the Form Layout component. In the
+            Properties pane of the Input Text component, in the General tab, set Label
+            Hint to <b>First Name</b>. In the Data tab, set value to <code>{{ $variables.filters[0].value }}</code>.
+          </li>
+          <li>
+            In the Component Palette, drag an Input Text component and drop it on the Form Layout component. In the
+            Properties pane of the Input Text component, in the General tab, set Label
+            Hint to <b>Last Name</b>. In the Data tab, set value to <code>{{ $variables.filters[01].value }}</code>
+          </li>
+          <li>
+            In the Component Palette, drag a Select Single component and drop it in the Form Layout component.
+          </li>
+          <li>
+            In the Properties pane of the Select Single component:
+            <ul>
+              <li>
+                <a target="_blank" href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/design-pages.html#GUID-34A69EF1-56C0-462A-83FB-D3F5948CFA3D">Add
+                            Data Quick Start</a> to bind to Department
+                data. In the Bind Data page, select the following <code>departmentObject</code>
+                fields:
+                <ul>
+                  <li>Id</li>
+
+                  <li>Department Name</li>
+
+                </ul>
+              </li>
+              <li>
+                In the Data tab, set value to <code>{{ $variables.filters[2].value }}</code>.
+              </li>
+              <li>
+                In the General tab, set Label Hint to <b>Department</b>.
+              </li>
+            </ul>
+
+          </li>
+
+
+          <li>
+            In the Component Palette, drag a Select Many component and drop it on the Form Layout component.
+          </li>
+          <li>
+            In the Properties pane of the Select Many component:
+            <ul>
+              <li>
+                <a target="_blank" href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/design-pages.html#GUID-34A69EF1-56C0-462A-83FB-D3F5948CFA3D">Add
+                        Data Quick Start</a> to bind to Skill data. In
+                the Bind Data page, select the following Skill Object fields:
+                <ul>
+                  <li>Id</li>
+
+                  <li>Name</li>
+
+                </ul>
+              </li>
+              <li>
+                In the Data tab, set value to <code>{{ $variables.filters[3].value }}</code>
+              </li>
+              <li>
+                In the General tab, set Label Hint to <b>Skill(s)</b>
+              </li>
+            </ul>
+
+          </li>
+
+
+
+          <li>
+            In the Component Palette, drag an Input Number component and drop it on the Form Layout component.
+          </li>
+          <li>
+            In the General tab of the Properties pane, set Label Hint to <b>Salary from</b> and, in the Data tab, set value to <code>{{ $variables.filters[4].value }}</code>.
+          </li>
+
+          <li>
+            In the Component Palette, drag an Input Number component and drop it on the Form Layout component.
+          </li>
+          <li>
+            In the Properties pane, in the General tab, set Label Hint to <b>Salary to</b> and, in the Data tab, set value to <code>{{ $variables.filters[5].value }}</code>.
+          </li>
+          <li>
+            In the Component Palette, drag a Button component and drop it on the Form Layout in last row. In the
+            Properties pane of the Button component:
+            <ul>
+              <li>
+                In the General tab, set the Label Hint to <b>Search</b>.
+              </li>
+              <li>
+                <a target="_blank" href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/work-actions-and-action-chains.html#GUID-69C60635-B452-44B0-BC7C-ABA147B63314">Add
+            an event listener</a>.
+              </li>
+              <li>
+                In the action chain named <code>ApplyFilterActionChain</code>, add the following actions:
+                <ul>
+                  <li>
+                    <a target="_blank" href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/work-actions-and-action-chains.html#GUID-E7BE6B00-7221-40E4-821D-59BEBBA0D896">
+                   Add a Call Module Function </a> with parameters
+                    from source <code>filters</code> variable map to Target <code>filters</code>
+                  </li>
+                  <li>
+                    <a target="_blank" href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/work-actions-and-action-chains.html#GUID-E87B6675-D7E4-49BC-B4E4-2B477FBE4B8D">Add
+                    an Assign Variables action</a> named <code>filtercriterionAssignVariable</code>                    with target <code>employeeListSDP</code> to <br>
+<pre>{
+  "filterCriterion": {
+    "op": "$and",
+    "criteria": "{{ $chain.results.filterModuleFunction }}"
+  }
+}</pre>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+
+
+          </li>
+          <li>
+            In the Component Palette, drag a Button component and drop it on the Form Layout componnet in the last row. In the
+            Properties pane of the Button component:
+            <ul>
+              <li>
+                In the General tab, set Label Hint to <b>Reset</b>.
+              </li>
+              <li>
+                <a target="_blank" href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/work-actions-and-action-chains.html#GUID-69C60635-B452-44B0-BC7C-ABA147B63314">Add
+                 an event listener</a>.
+              </li>
+              <li>
+                Add a Reset Variables action named <code>FilterResetVariables</code>                to the action chain named <code>ResetFiltersActionChain</code>. 
+              </li>
+              <li>In the Properties pane of the Reset Variable action, select <code>$page.variables.employeeListSDP.filterCriterion</code> and <code>$page.variables.filters</code> from the Variables to
+                Reset dropdown list.</li>
+
+            </ul>
+
+          </li>
+
+
+
+
+
+        </ol>
+      </div>
+    </oj-collapsible>
+  </oj-accordion>
+</div>
+
+
+

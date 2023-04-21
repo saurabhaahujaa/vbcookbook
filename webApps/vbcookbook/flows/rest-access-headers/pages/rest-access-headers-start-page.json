@@ -1,0 +1,42 @@
+{
+  "title": "Access Response Headers Recipe",
+  "description": "",
+  "variables": {
+    "responseHeaders": {
+      "type": "vb/ArrayDataProvider2",
+      "defaultValue": {
+        "itemType": "headers"
+      }
+    }
+  },
+  "metadata": {},
+  "types": {
+    "headers": {
+      "key": "string",
+      "value": "string"
+    }
+  },
+  "chains": {},
+  "eventListeners": {
+    "onButtonClick": {
+      "chains": [
+        {
+          "chainId": "callRestEndpointAction",
+          "parameters": {
+            "detail": "{{ $event.detail }}"
+          }
+        }
+      ]
+    }
+  },
+  "imports": {
+    "components": {
+      "oj-button": {
+        "path": "ojs/ojbutton"
+      },
+      "oj-table": {
+        "path": "ojs/ojtable"
+      }
+    }
+  }
+}

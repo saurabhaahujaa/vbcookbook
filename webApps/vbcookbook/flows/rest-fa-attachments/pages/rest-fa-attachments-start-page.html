@@ -1,0 +1,115 @@
+<!--
+ Copyright (c)2020, 2023, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+<div class="oj-sm-padding-2x oj-md-padding-8x recipe-desc">
+  This recipe shows you how to use to manage image and PDF file attachments associated with an Oracle Cloud Applications activity from
+  a Visual Builder app.
+</div>
+<div class="oj-flex oj-md-margin-8x-start oj-md-margin-8x-end sample-box">
+  <div class="oj-flex-item oj-sm-flex-direction-column sample-box2">
+    <div class="oj-flex">
+      <div class="oj-flex oj-flex-item oj-sm-12 oj-md-12">
+        <h1 id="h1--1326637583-1" class="oj-flex-item">List of Attachments</h1>
+        <div class="oj-flex-item oj-sm-flex-initial oj-sm-padding-2x-horizontal oj-sm-align-self-center oj-sm-flex-0">
+          <oj-button chroming="callToAction" id="filepicker-btn" title="Click Photo Or Upload File"
+            on-oj-action="[[$listeners.showUploadDialogAction]]" disabled="[[ $variables.faServerBusy ]]">Upload
+            File<span class="oj-ux-ico-upload" slot="startIcon"></span></oj-button>
+        </div>
+      </div>
+    </div>
+    <div class="oj-flex oj-sm-align-items-center">
+      <oj-label for="oj-input-text--1326637583-1" id="oj-label--1326637583-1"
+        class="oj-flex-item oj-sm-flex-initial oj-sm-padding-2x-horizontal">Activity Record ID:</oj-label>
+      <oj-input-text id="oj-input-text--1326637583-1" class="oj-flex-item oj-sm-padding-2x-horizontal"
+        value="{{ $variables.testingActivityId }}"></oj-input-text>
+    </div>
+    <div class="oj-flex">
+      <oj-table scroll-policy="loadMoreOnScroll" style="height:400px; width: 100%" id="oj-table-716052071-1"
+        :style.min-width="[[ $application.responsive.smOnly ? '300px' : '600px' ]]"
+        class="oj-flex-item oj-sm-12 oj-md-12 oj-table-stretch" data="[[$page.variables.attachmentsSDP]]"
+        columns='[  {    "headerText": "Title",    "field": "Title",    "sortable": "disabled"  },  {    "headerText": "Description",    "field": "Description",    "sortable": "disabled"  },  {    "headerText": "File Name",    "field": "FileName",    "sortable": "disabled"  },  {    "headerText": "",    "template": "Download"  },  {    "headerText": "",    "template": "Preview"  },  {    "headerText": "",    "template": "Delete"  }]'>
+        <template slot="Download">
+          <a target="_blank" :id="[['a-716052071-1-' + $current.index]]" on-click="[[$listeners.downloadClick]]">
+            <oj-bind-text value="[[ 'Download']]"></oj-bind-text>
+          </a>
+        </template>
+        <template slot="Preview">
+          <oj-bind-if
+            test="[[ $application.variables.isMobileDevice === false || $current.row.UploadedFileContentType.indexOf('pdf') === -1 ]]">
+            <a target="_blank" :id="[['a--1326637583-2-' + $current.index]]"
+              on-click="[[$listeners.previewClick]]">Preview</a>
+          </oj-bind-if>
+        </template>
+        <template slot="Delete">
+          <oj-button :id="[['oj-button-716052071-1-' + $current.index]]" chroming="borderless"
+            on-oj-action="[[$listeners.deleteFileAction]]">
+            <span class="vb-icon vb-icon-delete-trash-can" aria-hidden="true"></span>
+          </oj-button>
+        </template>
+      </oj-table>
+    </div>
+    <div class="oj-flex">
+      <h2 id="h1--1326637583-2" class="oj-flex-item oj-sm-12 oj-md-12">Attachment Preview</h2>
+    </div>
+
+    <div id="dialogWrapper">
+      <oj-dialog style="display:none" id="modalDialog1" dialog-title="Upload File">
+        <div slot="body">
+          <div class="oj-flex">
+            <div class="oj-flex-item oj-flex">
+              <oj-file-picker class="oj-flex-item" id="OJ-FILE-PICKER--147780837-1"
+                accept="[[['image/*','application/pdf','.pdf']]]" selection-mode="single"
+                on-oj-select="[[$listeners.fileSelectionChanged]]">
+              </oj-file-picker>
+            </div>
+            <oj-form-layout id="oj-form-layout-716052071-1" class="oj-flex-item oj-sm-12 oj-md-12"
+              style="padding-top:30px;">
+              <oj-input-text id="oj-input-text-716052071-1" label-hint="Title"
+                value="{{ $variables.fileUpload.Title }}"></oj-input-text>
+              <oj-input-text id="oj-input-text-716052071-2" label-hint="File Name"
+                value="{{ $variables.fileUpload.FileName }}"></oj-input-text>
+              <oj-text-area id="oj-text-area-716052071-1" label-hint="Description"
+                value="{{ $variables.fileUpload.Description }}" rows="6"></oj-text-area>
+            </oj-form-layout>
+            <div class="oj-flex-item">
+              <oj-bind-if test="[[ $variables.fileUpload.Size > 1100000]]">
+                <span style="color: red">
+              <oj-bind-text value="File too big"></oj-bind-text>
+            </span>
+              </oj-bind-if>
+            </div>
+          </div>
+        </div>
+        <div slot="footer">
+          <oj-button id="uploadButton" on-oj-action="[[$listeners.uploadButtonAction]]"
+            disabled="[[ $variables.fileUpload.Size > 1100000 ]]">Upload</oj-button>
+          <oj-button id="cancelButton" on-oj-action="[[$listeners.cancelButtonAction]]">Cancel</oj-button>
+        </div>
+      </oj-dialog>
+    </div>
+
+
+    <div class="oj-flex" data-vb-layout-type="grid">
+    </div>
+    <oj-bind-if test="[[ $variables.filePreview ]]">
+      <div class="oj-flex">
+        <object :data="[[ $page.variables.fileBodyForPreview ]]" style="width: 100%;height: 800px;border: none;"></object>
+      </div>
+    </oj-bind-if>
+
+  </div>
+
+  <oj-bind-if test="[[ $application.variables.isThisVBDesigner === false ]]">
+    <div class="oj-flex oj-sm-flex-1 oj-md-flex-1"
+      :style.min-width="[[ $application.responsive.smOnly ? '360px' : '500px' ]]">
+      <div class="recipe-box oj-bg-neutral-20 oj-flex-item">
+        <h1 class="oj-typography-heading-lg">Recipe</h1>
+        <div class="oj-flex">
+          <oj-vb-content config="[[ vbRouterFlow ]]" class="oj-flex-item oj-sm-12 oj-md-12"></oj-vb-content>
+        </div>
+      </div>
+    </div>
+  </oj-bind-if>
+</div>

@@ -1,0 +1,9 @@
+{
+    "id": "form-layout-inline",
+    "description": "Flow main",
+    "defaultPage": "form-layout-inline-start",
+    "chains": {},
+    "services": {},
+    "types": {},
+    "variables": {}
+}

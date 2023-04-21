@@ -1,0 +1,172 @@
+{
+  "title": "Oracle Cloud Applications Recipe",
+  "description": "Manage single activity attachments",
+  "variables": {
+    "fileUpload": {
+      "type": "UploadType"
+    },
+    "filePreview": {
+      "type": "boolean",
+      "defaultValue": false
+    },
+    "fileBodyForPreview": {
+      "type": "any"
+    },
+    "testingActivityId": {
+      "type": "number",
+      "defaultValue": 451952
+    },
+    "attachmentsSDP": {
+      "type": "vb/ServiceDataProvider",
+      "defaultValue": {
+        "endpoint": "activities_vb/getall_activities-Attachments",
+        "keyAttributes": "AttachedDocumentId",
+        "itemsPath": "items",
+        "responseType": "page:getallActivitiesAttachmentsResponse",
+        "uriParameters": {
+          "activities_Id": "{{ $variables.testingActivityId }}"
+        }
+      }
+    },
+    "faServerBusy": {
+      "type": "boolean",
+      "defaultValue": false
+    }
+  },
+  "types": {
+    "getallActivitiesAttachmentsResponse": {
+      "items": [
+        {
+          "links": [
+            {
+              "href": "string",
+              "rel": "string"
+            }
+          ],
+          "AttachedDocumentId": "number",
+          "FileName": "string",
+          "UploadedFileContentType": "string",
+          "Title": "string",
+          "Description": "string",
+          "CreationDate": "string"
+        }
+      ]
+    },
+    "UploadType": {
+      "Title": "string",
+      "FileName": "string",
+      "Description": "string",
+      "File": "any",
+      "FileContents": "string",
+      "UploadedFileContentType": "string",
+      "Size": "number"
+    }
+  },
+  "chains": {},
+  "eventListeners": {
+    "downloadClick": {
+      "chains": [
+        {
+          "chainId": "DownloadAttachment",
+          "parameters": {
+            "detail": "{{ $event.detail }}",
+            "key": "{{ $current.key }}",
+            "current": "{{ $current }}"
+          }
+        }
+      ]
+    },
+    "previewClick": {
+      "chains": [
+        {
+          "chainId": "PreviewAttachment",
+          "parameters": {
+            "detail": "{{ $event.detail }}",
+            "key": "{{ $current.key }}",
+            "current": "{{ $current }}"
+          }
+        }
+      ]
+    },
+    "uploadButtonAction": {
+      "chains": [
+        {
+          "chainId": "UploadFile",
+          "parameters": {
+            "detail": "{{ $event.detail }}"
+          }
+        }
+      ]
+    },
+    "cancelButtonAction": {
+      "chains": [
+        {
+          "chainId": "CancelUploadDialog",
+          "parameters": {
+            "detail": "{{ $event.detail }}"
+          }
+        }
+      ]
+    },
+    "showUploadDialogAction": {
+      "chains": [
+        {
+          "chainId": "ShowUploadDialog",
+          "parameters": {
+            "detail": "{{ $event.detail }}"
+          }
+        }
+      ]
+    },
+    "deleteFileAction": {
+      "chains": [
+        {
+          "chainId": "DeleteFile",
+          "parameters": {
+            "detail": "{{ $event.detail }}",
+            "key": "{{ $current.key }}",
+            "current": "{{ $current }}"
+          }
+        }
+      ]
+    },
+    "fileSelectionChanged": {
+      "chains": [
+        {
+          "chainId": "FilePickerSelectionChanged",
+          "parameters": {
+            "detail": "{{ $event.detail }}"
+          }
+        }
+      ]
+    }
+  },
+  "imports": {
+    "components": {
+      "oj-form-layout": {
+        "path": "ojs/ojformlayout"
+      },
+      "oj-input-text": {
+        "path": "ojs/ojinputtext"
+      },
+      "oj-button": {
+        "path": "ojs/ojbutton"
+      },
+      "oj-dialog": {
+        "path": "ojs/ojdialog"
+      },
+      "oj-table": {
+        "path": "ojs/ojtable"
+      },
+      "oj-file-picker": {
+        "path": "ojs/ojfilepicker"
+      },
+      "oj-text-area": {
+        "path": "ojs/ojinputtext"
+      },
+      "oj-label": {
+        "path": "ojs/ojlabel"
+      }
+    }
+  }
+}

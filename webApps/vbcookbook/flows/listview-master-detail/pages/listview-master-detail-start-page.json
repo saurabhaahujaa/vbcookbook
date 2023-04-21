@@ -1,0 +1,141 @@
+{
+  "title": "Master Detail Recipe",
+  "description": "",
+  "variables": {
+    "departmentListSDP": {
+      "type": "vb/ServiceDataProvider",
+      "defaultValue": {
+        "endpoint": "businessObjects/getall_Department",
+        "keyAttributes": "id",
+        "itemsPath": "items",
+        "responseType": "page:getallDepartmentResponse"
+      }
+    },
+    "employeeListSDP": {
+      "type": "vb/ServiceDataProvider",
+      "defaultValue": {
+        "endpoint": "businessObjects/getall_Employee",
+        "keyAttributes": "id",
+        "itemsPath": "items",
+        "responseType": "page:getallEmployeeResponse",
+        "filterCriterion": {
+          "op": "$eq",
+          "attribute": "department",
+          "value": "{{ $variables.selectedDepartment }}"
+        }
+      }
+    },
+    "selectedDepartment": {
+      "type": "number"
+    },
+    "selectedEmployee": {
+      "type": "number"
+    },
+    "employee": {
+      "type": "get_Employee"
+    }
+  },
+  "metadata": {},
+  "types": {
+    "getallDepartmentResponse": {
+      "items": [
+        {
+          "departmentName": "string",
+          "id": "number"
+        }
+      ]
+    },
+    "@decorators.getallDepartmentResponse": {
+      "endpoint": "getall_Department",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "getallEmployeeResponse": {
+      "items": [
+        {
+          "firstName": "string",
+          "hireDate": "string",
+          "id": "number",
+          "lastName": "string",
+          "salary": "number"
+        }
+      ]
+    },
+    "@decorators.getallEmployeeResponse": {
+      "endpoint": "getall_Employee",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "@decorators.get_Employee": {
+      "endpoint": "get_Employee",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "get_Employee": {
+      "email": "string",
+      "firstName": "string",
+      "hireDate": "string",
+      "id": "number",
+      "lastName": "string",
+      "manager": "number",
+      "phoneNumber": "string",
+      "salary": "number"
+    }
+  },
+  "chains": {},
+  "eventListeners": {
+    "departmentListSelected": {
+      "chains": [
+        {
+          "chainId": "DepartmentSelectedChain",
+          "parameters": {
+            "keys": "{{ Array.from($event.detail.value.values()) }}"
+          }
+        }
+      ]
+    },
+    "employeeListSelected": {
+      "chains": [
+        {
+          "chainId": "EmployeeSelectedChain",
+          "parameters": {
+            "keys": "{{ Array.from($event.detail.value.values()) }}"
+          }
+        }
+      ]
+    }
+  },
+  "imports": {
+    "components": {
+      "oj-list-view": {
+        "path": "ojs/ojlistview"
+      },
+      "oj-vb-list-item": {
+        "path": "vb/components/list-item/loader"
+      },
+      "oj-form-layout": {
+        "path": "ojs/ojformlayout"
+      },
+      "oj-input-number": {
+        "path": "ojs/ojinputnumber"
+      },
+      "oj-input-date": {
+        "path": "ojs/ojdatetimepicker"
+      },
+      "oj-input-text": {
+        "path": "ojs/ojinputtext"
+      },
+      "oj-avatar": {
+        "path": "ojs/ojavatar"
+      }
+    },
+    "modules": {
+      "ojValidationBase": {
+        "path": "ojs/ojvalidation-base"
+      },
+      "ojValidationNumber": {
+        "path": "ojs/ojvalidation-number"
+      }
+    }
+  }
+}

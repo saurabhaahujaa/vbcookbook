@@ -1,0 +1,10 @@
+{
+
+  "id": "multi-step-wizard",
+  "description": "Flow main",
+  "defaultPage": "multi-step-wizard-start",
+  "chains": {},
+  "services": {},
+  "types": {},
+  "variables": {}
+}

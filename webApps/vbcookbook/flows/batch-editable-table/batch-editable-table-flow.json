@@ -1,0 +1,10 @@
+{
+
+    "id": "batch-editable-table",
+    "description": "Flow main",
+    "defaultPage": "batch-editable-table-start",
+    "chains": {},
+    "services": {},
+    "types": {},
+    "variables": {}
+}

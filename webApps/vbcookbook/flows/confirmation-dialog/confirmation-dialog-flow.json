@@ -1,0 +1,10 @@
+{
+
+  "id": "confirmation-dialog",
+  "description": "Flow main",
+  "defaultPage": "confirmation-dialog-start",
+  "chains": {},
+  "services": {},
+  "types": {},
+  "variables": {}
+}

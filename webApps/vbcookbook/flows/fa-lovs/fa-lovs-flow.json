@@ -1,0 +1,10 @@
+{
+
+  "id": "fa-lovs",
+  "description": "Flow main",
+  "defaultPage": "fa-lovs-start",
+  "chains": {},
+  "services": {},
+  "types": {},
+  "variables": {}
+}

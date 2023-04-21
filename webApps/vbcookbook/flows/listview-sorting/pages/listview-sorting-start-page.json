@@ -1,0 +1,100 @@
+{
+  "title": "Sorting Recipe",
+  "description": "",
+  "variables": {
+    "countryListSDP": {
+      "type": "vb/ServiceDataProvider",
+      "defaultValue": {
+        "endpoint": "businessObjects/getall_Country",
+        "keyAttributes": "id",
+        "itemsPath": "items",
+        "responseType": "page:getallCountryResponse",
+        "sortCriteria": [
+          {
+            "attribute": "countryName"
+          }
+        ],
+        "transformsContext": {
+          "vb-textFilterAttributes": [
+            "countryName"
+          ]
+        }
+      }
+    },
+    "ascending": {
+      "type": "boolean",
+      "defaultValue": true,
+      "onValueChanged": {
+        "chains": [
+          {
+            "chainId": "sortOrderChangeChain",
+            "parameters": {
+              "event": "{{ $event }}"
+            }
+          }
+        ]
+      }
+    },
+    "sortByOptions": {
+      "type": "object[]",
+      "defaultValue": [
+        {
+          "value": "countryName",
+          "label": "Name"
+        },
+        {
+          "value": "countryCode",
+          "label": "Code"
+        }
+      ]
+    },
+    "sortByOptionsADP": {
+      "type": "vb/ArrayDataProvider2",
+      "defaultValue": {
+        "data": "{{ $variables.sortByOptions }}",
+        "keyAttributes": "value",
+        "textFilterAttributes": [
+          "value"
+        ]
+      }
+    }
+  },
+  "metadata": {},
+  "types": {
+    "getallCountryResponse": {
+      "items": [
+        {
+          "countryCode": "string",
+          "countryName": "string",
+          "id": "number"
+        }
+      ]
+    },
+    "@decorators.getallCountryResponse": {
+      "endpoint": "getall_Country",
+      "service": "businessObjects",
+      "path": "response"
+    }
+  },
+  "chains": {},
+  "eventListeners": {},
+  "imports": {
+    "components": {
+      "oj-select-single": {
+        "path": "ojs/ojselectsingle"
+      },
+      "oj-switch": {
+        "path": "ojs/ojswitch"
+      },
+      "oj-label": {
+        "path": "ojs/ojlabel"
+      },
+      "oj-list-view": {
+        "path": "ojs/ojlistview"
+      },
+      "oj-vb-list-item": {
+        "path": "vb/components/list-item/loader"
+      }
+    }
+  }
+}

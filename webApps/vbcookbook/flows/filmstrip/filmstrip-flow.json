@@ -1,0 +1,10 @@
+{
+
+  "id": "filmstrip",
+  "description": "Flow main",
+  "defaultPage": "filmstrip-start",
+  "chains": {},
+  "services": {},
+  "types": {},
+  "variables": {}
+}

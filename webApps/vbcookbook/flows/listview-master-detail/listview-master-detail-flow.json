@@ -1,0 +1,10 @@
+{
+
+    "id": "listview-master-detail",
+    "description": "Flow main",
+    "defaultPage": "listview-master-detail-start",
+    "chains": {},
+    "services": {},
+    "types": {},
+    "variables": {}
+}

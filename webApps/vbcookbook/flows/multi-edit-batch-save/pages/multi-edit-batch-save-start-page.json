@@ -1,0 +1,192 @@
+{
+  "title": "Multi Edit Batch Save Recipe",
+  "description": "",
+  "variables": {
+    "currentEmployee": {
+      "type": "employee"
+    },
+    "departmentId": {
+      "type": "number",
+      "defaultValue": 2,
+      "onValueChanged": {
+        "chains": [
+          {
+            "chainId": "FetchDepartment",
+            "parameters": {
+              "event": "{{ $event }}"
+            }
+          }
+        ]
+      }
+    },
+    "departmentListSDP": {
+      "type": "vb/ServiceDataProvider",
+      "defaultValue": {
+        "endpoint": "businessObjects/getall_Department",
+        "keyAttributes": "id",
+        "itemsPath": "items",
+        "responseType": "page:getallDepartmentResponse",
+        "transformsContext": {
+          "vb-textFilterAttributes": [
+            "departmentName"
+          ]
+        }
+      }
+    },
+    "departmentName": {
+      "type": "string"
+    },
+    "employeeListADP": {
+      "type": "vb/ArrayDataProvider2",
+      "defaultValue": {
+        "keyAttributes": "id",
+        "itemType": "employee"
+      }
+    },
+    "idForNewEmployee": {
+      "type": "number",
+      "defaultValue": -1
+    },
+    "rowStatus": {
+      "type": "object"
+    },
+    "originalDepartmentName": {
+      "type": "string"
+    }
+  },
+  "types": {
+    "@decorators.getallDepartmentResponse": {
+      "endpoint": "getall_Department",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "employee": {
+      "department": "number",
+      "email": "string",
+      "firstName": "string",
+      "id": "number",
+      "lastName": "string",
+      "salary": "number"
+    },
+    "@decorators.employee": {
+      "endpoint": "get_Employee",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "getallDepartmentResponse": {
+      "items": [
+        {
+          "departmentName": "string",
+          "id": "number"
+        }
+      ]
+    }
+  },
+  "chains": {},
+  "eventListeners": {
+    "ojButtonOjAction": {
+      "chains": [
+        {
+          "chainId": "UpdateEmployeeChain",
+          "parameters": {
+            "detail": "{{ $event.detail }}"
+          }
+        }
+      ]
+    },
+    "ojButtonOjAction2": {
+      "chains": [
+        {
+          "chainId": "RefreshButtonChain",
+          "parameters": {
+            "detail": "{{ $event.detail }}"
+          }
+        }
+      ]
+    },
+    "ojButtonOjAction3": {
+      "chains": [
+        {
+          "chainId": "NewEmployeeButtonActionChain",
+          "parameters": {
+            "detail": "{{ $event.detail }}"
+          }
+        }
+      ]
+    },
+    "editEmployee": {
+      "chains": [
+        {
+          "chainId": "OpenDialogChain",
+          "parameters": {
+            "current": "{{ $current.row }}"
+          }
+        }
+      ]
+    },
+    "deleteEmployee": {
+      "chains": [
+        {
+          "chainId": "DeleteEmployee",
+          "parameters": {
+            "detail": "{{ $event.detail }}",
+            "key": "{{ $current.key }}",
+            "index": "{{ $current.index }}",
+            "current": "{{ $current.row }}"
+          }
+        }
+      ]
+    },
+    "ojButtonOjAction4": {
+      "chains": [
+        {
+          "chainId": "SaveButtonActionChain",
+          "parameters": {
+            "detail": "{{ $event.detail }}"
+          }
+        }
+      ]
+    },
+    "vbEnter": {
+      "chains": [
+        {
+          "chainId": "FetchDepartment",
+          "parameters": {}
+        }
+      ]
+    }
+  },
+  "imports": {
+    "components": {
+      "oj-select-single": {
+        "path": "ojs/ojselectsingle"
+      },
+      "oj-table": {
+        "path": "ojs/ojtable"
+      },
+      "oj-input-text": {
+        "path": "ojs/ojinputtext"
+      },
+      "oj-dialog": {
+        "path": "ojs/ojdialog"
+      },
+      "oj-button": {
+        "path": "ojs/ojbutton"
+      },
+      "oj-input-number": {
+        "path": "ojs/ojinputnumber"
+      },
+      "oj-form-layout": {
+        "path": "ojs/ojformlayout"
+      }
+    },
+    "modules": {
+      "ojValidationBase": {
+        "path": "ojs/ojvalidation-base"
+      },
+      "ojValidationNumber": {
+        "path": "ojs/ojvalidation-number"
+      }
+    }
+  }
+}

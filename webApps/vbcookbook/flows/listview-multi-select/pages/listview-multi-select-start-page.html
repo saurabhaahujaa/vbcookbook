@@ -1,0 +1,72 @@
+<!--
+ Copyright (c)2020, 2023, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+<div class="oj-sm-padding-2x oj-md-padding-8x recipe-desc">
+  This recipe shows you how users can select one or more list items for the List
+  View
+  component. The recipe also
+  demonstrates
+  how you can monitor the user’s selections.
+</div>
+<div class="oj-flex oj-flex-item oj-md-margin-8x-start oj-md-margin-8x-end sample-box">
+  <div class="oj-flex oj-flex-item oj-sm-flex-direction-column sample-box2">
+    <div>
+      <oj-label
+        class="oj-label-nowrap oj-flex-item oj-sm-12 oj-md-3"
+        for="listview-multiselect">Employee List:</oj-label>
+      <oj-list-view class="oj-flex-item oj-sm-flex-initial"
+        selected="{{$functions.selectedItems}}" selection-mode="multiple"
+        id="listview-multiselect" data="[[$page.variables.employeeListSDP]]"
+        scroll-policy="loadMoreOnScroll" scroll-policy-options.fetch-size="10"
+        style="height:240px;"
+        on-selected-changed="[[$listeners.listviewMultiselectSelected]]">
+        <template slot="itemTemplate">
+          <div class="oj-flex">
+            <div class="oj-flex-item oj-sm-2 oj-md-2">
+              <oj-selector selected-keys="{{$functions.selectedItems}}"
+                 :aria-label="[[ $current.data.firstName + ' ' + $current.data.lastName ]]"
+                selection-mode="multiple" row-key="[[ $current.data.id ]]"
+                :id="[['listview_checkboxset' + $current.data.id]]">
+              </oj-selector>
+            </div>
+            <div class="oj-flex-item oj-sm-4 oj-md-4">
+              <oj-avatar
+                src="[[ $application.path + 'resources/images/employees/' + $current.data.id + '.png' ]]"
+                size="xs"></oj-avatar>
+            </div>
+            <div class="oj-flex-item oj-sm-6 oj-md-6">
+              <oj-bind-text
+                value="[[ $current.data.firstName + ' ' + $current.data.lastName ]]">
+              </oj-bind-text>
+            </div>
+          </div>
+
+        </template>
+      </oj-list-view>
+    </div>
+
+
+    <div class="oj-flex-item oj-sm-flex-initial oj-flex">
+      <oj-label class="oj-flex-item oj-sm-flex-initial">Selected Employee IDs:
+      </oj-label>
+      <oj-bind-text value="{{ JSON.stringify($variables.selectedEmployeeIds)}}">
+      </oj-bind-text>
+    </div>
+
+
+  </div>
+
+  <oj-bind-if test="[[ $application.variables.isThisVBDesigner === false ]]">
+    <div class="oj-flex oj-sm-flex-1 oj-md-flex-1"
+      :style.min-width="[[ $application.responsive.smOnly ? '360px' : '500px' ]]">
+      <div class="recipe-box oj-bg-neutral-20 oj-flex-item">
+        <h1 class="oj-typography-heading-lg">Recipe</h1>
+        <div class="recipe-body oj-helper-overflow-wrap-anywhere">
+          <oj-vb-content config="[[ vbRouterFlow ]]" class="oj-flex-item oj-sm-12 oj-md-12"></oj-vb-content>
+        </div>
+      </div>
+    </div>
+  </oj-bind-if>
+</div>

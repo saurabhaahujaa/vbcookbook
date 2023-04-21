@@ -1,0 +1,10 @@
+{
+
+  "id": "multi-edit-batch-save",
+  "description": "Flow main",
+  "defaultPage": "multi-edit-batch-save-start",
+  "chains": {},
+  "services": {},
+  "types": {},
+  "variables": {}
+}

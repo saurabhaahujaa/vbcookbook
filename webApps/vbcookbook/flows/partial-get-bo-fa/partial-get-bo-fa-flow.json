@@ -1,0 +1,10 @@
+{
+
+    "id": "partial-get-bo-fa",
+    "description": "Flow main",
+    "defaultPage": "partial-get-bo-fa-start",
+    "chains": {},
+    "services": {},
+    "types": {},
+    "variables": {}
+}

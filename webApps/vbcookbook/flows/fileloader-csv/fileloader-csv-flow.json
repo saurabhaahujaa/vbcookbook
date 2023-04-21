@@ -1,0 +1,10 @@
+{
+
+  "id": "fileloader-csv",
+  "description": "Flow main",
+  "defaultPage": "fileloader-csv-start",
+  "chains": {},
+  "services": {},
+  "types": {},
+  "variables": {}
+}

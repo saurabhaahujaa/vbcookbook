@@ -1,0 +1,158 @@
+{
+  "title": "Dynamic Form Recipe",
+  "description": "",
+  "variables": {
+    "emp1": {
+      "type": "number",
+      "defaultValue": 100,
+      "onValueChanged": {
+        "chains": [
+          {
+            "chainId": "loadEmployeeChain",
+            "parameters": {
+              "fetchedFields": "[[ $variables.employeeDetailFormRenderedFields ]]",
+              "employeeId": "{{ $variables.emp1 }}"
+            }
+          }
+        ]
+      }
+    },
+    "employee": {
+      "type": "page:getEmployeeResponse"
+    },
+    "employeeDetailFormLoadingStatus": {
+      "type": "string",
+      "defaultValue": "pending"
+    },
+    "employeeDetailFormRenderedFields": {
+      "type": "any[]",
+      "onValueChanged": {
+        "chains": [
+          {
+            "chainId": "loadEmployeeChain",
+            "parameters": {
+              "fetchedFields": "[[ $variables.employeeDetailFormRenderedFields ]]",
+              "employeeId": "{{ $variables.emp1 }}"
+            }
+          }
+        ]
+      }
+    },
+    "employeeListSDP": {
+      "type": "vb/ServiceDataProvider",
+      "defaultValue": {
+        "endpoint": "businessObjects/getall_Employee",
+        "keyAttributes": "id",
+        "itemsPath": "items",
+        "responseType": "getallEmployeeResponse",
+        "transformsContext": {
+          "vb-textFilterAttributes": [
+            "firstName"
+          ]
+        }
+      }
+    }
+  },
+  "metadata": {
+    "businessObjectsGetEmployeeMetadata": {
+      "type": "vb/DynamicLayoutMetadataProviderDescriptor",
+      "defaultValue": {
+        "endpoint": "businessObjects/get_Employee"
+      }
+    }
+  },
+  "types": {
+    "@decorators.getallEmployeeResponse": {
+      "endpoint": "getall_Employee",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "@decorators.getEmployeeResponse": {
+      "endpoint": "get_Employee",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "getallEmployeeResponse": {
+      "items": [
+        {
+          "firstName": "string",
+          "id": "number",
+          "lastName": "string",
+          "managerObject": {
+            "count": "number",
+            "hasMore": "boolean",
+            "items": [
+              {
+                "commissionPct": "number",
+                "createdBy": "string",
+                "creationDate": "string",
+                "department": "number",
+                "email": "string",
+                "firstName": "string",
+                "hireDate": "string",
+                "id": "number",
+                "job": "number",
+                "lastName": "string",
+                "lastUpdateDate": "string",
+                "lastUpdatedBy": "string",
+                "links": [
+                  {
+                    "href": "string",
+                    "kind": "string",
+                    "name": "string",
+                    "properties": {
+                      "changeIndicator": "string"
+                    },
+                    "rel": "string"
+                  }
+                ],
+                "manager": "number",
+                "phoneNumber": "string",
+                "salary": "number"
+              }
+            ],
+            "limit": "number",
+            "links": [
+              {
+                "href": "string",
+                "kind": "string",
+                "name": "string",
+                "properties": {
+                  "changeIndicator": "string"
+                },
+                "rel": "string"
+              }
+            ],
+            "offset": "number",
+            "totalResults": "number"
+          }
+        }
+      ]
+    },
+    "getEmployeeResponse": "object"
+  },
+  "chains": {},
+  "eventListeners": {
+    "ojSelectSingleValue": {
+      "chains": [
+        {
+          "chainId": "SingleSelectValueChangeChain",
+          "parameters": {
+            "value": "{{ $event.detail.value }}"
+          }
+        }
+      ]
+    }
+  },
+  "imports": {
+    "components": {
+      "oj-dyn-form": {
+        "path": "oj-dyn/form/loader"
+      },
+      "oj-select-single": {
+        "path": "ojs/ojselectsingle"
+      }
+
+    }
+  }
+}

@@ -1,0 +1,93 @@
+<!--
+ Copyright (c)2020, 2023, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+<div class="oj-sm-padding-2x oj-md-padding-8x recipe-desc">
+  This recipe shows you how to get data from an instance of Oracle Data REST
+  Services that you can filter, sort and paginate in your Visual Builder
+  application. It also demonstrates how to filter the retrieved data using the
+  Table and Select (Single) components.
+</div>
+<style>
+  .matchedText {
+    font-weight: bold;
+    color: green;
+  }
+</style>
+<div class="oj-flex oj-md-margin-8x-start oj-md-margin-8x-end sample-box">
+  <div class="oj-flex-item oj-sm-flex-direction-column sample-box2">
+    <div
+      class="
+        oj-flex
+        oj-sm-align-items-center
+        oj-sm-flex-items-initial
+        oj-sm-padding-2x
+      "
+      style="padding-left: 12px"
+    >
+      <oj-label id="filterInputLabel" for="filterInputText" class="oj-flex-item oj-sm-padding-2x-end"
+        >Search
+      </oj-label>
+
+      <oj-sample-input-text-typeahead
+        id="oj-sample-input-text-typeahead--1933717278-1"
+        style="min-width: 300px"
+        class="oj-flex-item"
+        clear-icon="conditional"
+        placeholder="Enter a text to search..."
+        raw-value="{{ $variables.searchText }}"
+        value="{{ $variables.searchText }}"
+      ></oj-sample-input-text-typeahead>
+    </div>
+
+    <div class="oj-flex">
+      <oj-table id="filters-table" scroll-policy="loadMoreOnScroll" style="min-width: 600px; height: 300px; width: 100%"
+        class="oj-flex-item oj-table-stretch" columns='[
+        {
+          "headerText":"Employee No",
+          "field":"empno"
+        },
+        {
+          "headerText":"Employee Name",
+          "field":"ename",
+          "template" : "name"
+        }
+      ]' data="{{ $page.variables.getEmployeesListSDP }}" scroll-policy-options='{"fetchSize": 5}'
+      >
+        <template slot="name">
+          <oj-highlight-text
+            text="[[ ''+($current.data ? $current.data : '') ]]"
+            match-text="[[ $variables.searchText ]]"
+          ></oj-highlight-text>
+        </template>
+      </oj-table>
+    </div>
+    <div
+      class="
+        oj-flex-item oj-flex oj-sm-flex-direction-column oj-sm-flex-items-0
+      "
+    >
+      <h6 class="oj-flex-item">ORDS based Filtering for Select Single</h6>
+      <oj-select-single
+        id="selectSingleORDS"
+        label-hint="Select (Single)"
+        data="[[$page.variables.getEmployeesListSDP2]]"
+        item-text="ename"
+        class="oj-flex-item oj-form-control-width-md"
+      ></oj-select-single>
+    </div>
+  </div>
+
+  <oj-bind-if test="[[ $application.variables.isThisVBDesigner === false ]]">
+    <div class="oj-flex oj-sm-flex-1 oj-md-flex-1"
+      :style.min-width="[[ $application.responsive.smOnly ? '360px' : '500px' ]]">
+      <div class="recipe-box oj-bg-neutral-20 oj-flex-item">
+        <h1 class="oj-typography-heading-lg">Recipe</h1>
+        <div class="recipe-body oj-helper-overflow-wrap-anywhere">
+          <oj-vb-content config="[[ vbRouterFlow ]]" class="oj-flex-item oj-sm-12 oj-md-12"></oj-vb-content>
+        </div>
+      </div>
+    </div>
+  </oj-bind-if>
+</div>

@@ -1,0 +1,11 @@
+{
+
+  "id": "bo-triggers",
+  "description": "Flow main",
+  "defaultPage": "bo-triggers-start",
+  "chains": {
+  },
+  "services": {},
+  "types": {},
+  "variables": {}
+}

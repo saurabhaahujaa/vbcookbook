@@ -1,0 +1,73 @@
+{
+  "title": "Film Strip Recipe",
+  "description": "",
+  "variables": {
+    "currentJob": {
+      "type": {
+        "id": "string",
+        "index": "number"
+      }
+    },
+    "employeeListSDP": {
+      "type": "vb/ServiceDataProvider",
+      "defaultValue": {
+        "endpoint": "businessObjects/getall_Employee",
+        "keyAttributes": "id",
+        "itemsPath": "items",
+        "responseType": "page:getallEmployeeResponse",
+        "uriParameters": {
+          "q": "{{ $variables.jobs.length==0 ?'job='+1 : 'job='+$variables.jobs[$variables.currentJob.index || 0].id }}"
+        }
+      }
+    },
+    "jobs": {
+      "type": [
+        {
+          "id": "number",
+          "title": "string"
+        }
+      ]
+    }
+  },
+  "metadata": {},
+  "types": {
+    "@decorators.getallEmployeeResponse": {
+      "endpoint": "getall_Employee",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "getallEmployeeResponse": {
+      "items": [
+        {
+          "email": "string",
+          "firstName": "string",
+          "hireDate": "string",
+          "id": "number",
+          "lastName": "string",
+          "phoneNumber": "string"
+        }
+      ]
+    }
+  },
+  "chains": {},
+  "eventListeners": {
+    "vbEnter": {
+      "chains": [
+        {
+          "chainId": "loadJobsChain",
+          "parameters": {}
+        }
+      ]
+    }
+  },
+  "imports": {
+    "components": {
+      "oj-table": {
+        "path": "ojs/ojtable"
+      },
+      "oj-film-strip": {
+        "path": "ojs/ojfilmstrip"
+      }
+    }
+  }
+}

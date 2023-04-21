@@ -1,0 +1,156 @@
+{
+
+  "title": "Edit Employee",
+  "description": "Updates single Employee record",
+  "variables": {
+    "employee": {
+      "type": "page:getEmployeeResponse"
+    },
+    "employeeETag": {
+      "type": "string"
+    },
+    "employeeId": {
+      "type": "string",
+      "required": true,
+      "input": "fromUrl"
+    },
+    "employeeListSDP": {
+      "type": "vb/ServiceDataProvider",
+      "defaultValue": {
+        "endpoint": "businessObjects/getall_Employee",
+        "keyAttributes": "id",
+        "itemsPath": "items",
+        "responseType": "page:getallEmployeeResponse",
+        "uriParameters": {},
+        "transformsContext": {
+          "vb-textFilterAttributes": [
+            "lastName"
+          ]
+        }
+      }
+    },
+    "jobListSDP": {
+      "type": "vb/ServiceDataProvider",
+      "defaultValue": {
+        "endpoint": "businessObjects/getall_Job",
+        "keyAttributes": "id",
+        "itemsPath": "items",
+        "responseType": "page:getallJobResponse",
+        "uriParameters": {},
+        "transformsContext": {
+          "vb-textFilterAttributes": [
+            "jobTitle"
+          ]
+        }
+      }
+    },
+    "saveEmployeeChainInProgress": {
+      "type": "boolean",
+      "defaultValue": false
+    }
+  },
+  "metadata": {},
+  "types": {
+    "@decorators.getallEmployeeResponse": {
+      "endpoint": "getall_Employee",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "@decorators.getallJobResponse": {
+      "endpoint": "getall_Job",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "@decorators.getEmployeeResponse": {
+      "endpoint": "get_Employee",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "businessObjectsServiceErrorResponseType": {
+      "body": {
+        "status": "string",
+        "title": "string",
+        "o:errorDetails": [
+          {
+            "detail": "string",
+            "o:errorCode": "string"
+          }
+        ]
+      },
+      "status": "number"
+    },
+    "getallEmployeeResponse": {
+      "items": [
+        {
+          "id": "number",
+          "lastName": "string"
+        }
+      ]
+    },
+    "getallJobResponse": {
+      "items": [
+        {
+          "id": "number",
+          "jobTitle": "string"
+        }
+      ]
+    },
+    "getEmployeeResponse": {
+      "job": "number",
+      "lastName": "string",
+      "manager": "number",
+      "salary": "number"
+    }
+  },
+  "chains": {
+  },
+  "eventListeners": {
+    "backButtonClicked": {
+      "chains": [
+        {
+          "chainId": "goBackChain"
+        }
+      ]
+    },
+    "saveButtonClicked": {
+      "chains": [
+        {
+          "chainId": "saveEmployeeChain"
+        }
+      ]
+    },
+    "vbEnter": {
+      "chains": [
+        {
+          "chainId": "loadEmployeeChain"
+        }
+      ]
+    }
+  },
+  "imports": {
+    "components": {
+      "oj-select-single": {
+        "path": "ojs/ojselectsingle"
+      },
+      "oj-validation-group": {
+        "path": "ojs/ojvalidationgroup"
+      },
+      "oj-form-layout": {
+        "path": "ojs/ojformlayout"
+      },
+      "oj-input-text": {
+        "path": "ojs/ojinputtext"
+      },
+      "oj-input-number": {
+        "path": "ojs/ojinputnumber"
+      },
+      "oj-toolbar": {
+        "path": "ojs/ojtoolbar"
+      },
+      "oj-button": {
+        "path": "ojs/ojbutton"
+      }
+
+    }
+  }
+}

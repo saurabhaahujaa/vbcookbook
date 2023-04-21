@@ -1,0 +1,106 @@
+<!--
+ Copyright (c)2020, 2023, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+<p>A List View component displays employee data. Page variables reference the user’s selection and an action chain that
+  updates these page variables is invoked from the List View component’s event listener.</p>
+
+<div class="oj-flex">
+  <oj-accordion class="oj-flex-item oj-sm-12 oj-md-12">
+    <oj-collapsible id="step1" expanded="true">
+      <h1 slot="header">Create the Page Model</h1>
+      <div>
+        <p><a target="_blank"
+            href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/work-variables-and-types.html#GUID-289776BF-7E21-4B4C-AB1C-31022DA6910B">Create
+            the following page variables:</a></p>
+
+        <ul>
+          <li><code>selectedEmployeeIds</code> - Array of Numbers</li>
+        </ul>
+      </div>
+    </oj-collapsible>
+  </oj-accordion>
+
+</div>
+
+<div class="oj-flex">
+  <oj-accordion class="oj-flex-item oj-sm-12 oj-md-12">
+    <oj-collapsible id="step2">
+      <h1 slot="header">Create the UI</h1>
+      <div>
+        <ol>
+        
+          <li>In the Component Palette, drag a Flex Container and drop it on the page. </li>
+        
+        
+          <li>In the Properties pane, set the Direction property to <code>Vertical</code>.</li>
+          <li>Drop a Form Layout component in the Flex Container and set the Max Columns property to <code>1</code>.</li>
+          <li>Drop a Label component below the Form Layout and set the Text property value to <code>Employee List:</code>.
+          </li>
+          <li>Drop a List View component below the Label component. </li>
+          <li>In the All tab of the Properties pane, set selection-mode to <code>multiple</code> and
+            set selected to <code>[[$function.selectedItems]]</code></li>
+          <li>Use the <a target="_blank"
+              href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/design-pages.html#GUID-34A69EF1-56C0-462A-83FB-D3F5948CFA3D">Add
+              Data Quick Start</a> to bind the List View component to the Employee business object. </li>
+          <li>In the Bind Data page of the Add Data dialog, select the following items from the endpoint structure:
+            <ul>
+              <li>First Name </li>
+              <li>Last Name</li>
+              <li>Id</li>
+              <li>Optional: You can also include other fields in row data to be able to access them on page</li>
+            </ul>
+          </li>
+          
+          <li>To include an employee’s photo, drag an Avatar component from the Component Palette to the List View and, in the Properties pane, set src 
+              to <code>$application.path + 'resources/images/employees/' + $current.data.id + '.png'</code>. </li>
+
+          <li>We currently don't have design-time support for the Selector component (oj-selector) in the Component Palette. To work around this limitation, go to the Code view of your page and enter 
+              the oj-selector component as the first child tag of itemTemplate.
+
+          </li>
+          
+          
+          <li>
+              In the JavaScript tab, enter the following code to monitor the current selection:
+            <br>             
+<pre>
+define(['ojs/ojkeyset', 'knockout'], function (keyset, ko) {
+  'use strict';
+
+  var PageModule = function PageModule() { };
+
+  PageModule.prototype.selectedItems = ko.observable(new keyset.KeySetImpl());
+
+  return PageModule;
+});              
+ </pre>
+          </li>
+          <li>Drop a Flex Container component below the List View component.</li>
+        
+          <li>Drop a Label and a Text component into the Flex Container and set the Label component’s Text property to
+            <code>Selected Employee IDs:</code> and the Text component’s Value property to
+            <code>{{ JSON.stringify($variables.selectedEmployeeIds)}}</code>.</li>
+        </ol>
+      </div>
+    </oj-collapsible>
+  </oj-accordion>
+</div>
+
+<div class="oj-flex">
+  <oj-accordion class="oj-flex-item oj-sm-12 oj-md-12">
+    <oj-collapsible id="step3">
+      <h1 slot="header">Create the Events and Action Chains</h1>
+      <div>
+        <ol>
+          <li>In the Events tab of the List View's Properties pane, create a new event
+            for selected.</li>
+          <li>In the action chain, drag an Assign Variables action onto the chain. </li>
+          <li>Map the <code>keys</code> action chain variable to the <code>selectedEmployeeIds</code> Page Variable.</li>
+
+        </ol>
+      </div>
+    </oj-collapsible>
+  </oj-accordion>
+</div>

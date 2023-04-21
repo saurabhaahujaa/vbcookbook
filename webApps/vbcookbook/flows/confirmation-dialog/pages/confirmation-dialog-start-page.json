@@ -1,0 +1,123 @@
+{
+  "title": "Unsaved Data Confirmation Recipe",
+  "description": "",
+  "variables": {
+    "formDept": {
+      "type": "department"
+    },
+    "cleanEmp": {
+      "type": "employee"
+    },
+    "formEmp": {
+      "type": "employee"
+    },
+    "cleanDept": {
+      "type": "department"
+    },
+    "dirtyForm": {
+      "type": "boolean",
+      "defaultValue": "[[ ($page.variables.currentTab == 'employee' && $page.functions.unsavedChange($page.variables.cleanEmp, $page.variables.formEmp)) || $page.functions.unsavedChange($page.variables.cleanDept, $page.variables.formDept) ]]"
+    },
+    "tabToSwitch": {
+      "type": "string"
+    },
+    "currentTab": {
+      "type": "string",
+      "defaultValue": "employee"
+    }
+  },
+  "metadata": {},
+  "types": {
+    "@decorators.department": {
+      "endpoint": "get_Department",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "department": {
+      "departmentName": "string"
+    },
+    "@decorators.employee": {
+      "endpoint": "get_Employee",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "employee": {
+      "firstName": "string",
+      "lastName": "string"
+    }
+  },
+  "chains": {},
+  "eventListeners": {
+    "vbEnter": {
+      "chains": [
+        {
+          "chainId": "loadData",
+          "parameters": {}
+        }
+      ]
+    },
+    "tabBar1BeforeSelect": {
+      "chains": [
+        {
+          "chainId": "beforeTabChange",
+          "parameters": {
+            "detail": "{{ $event.detail }}"
+          }
+        }
+      ],
+      "preventDefault": "[[ $variables.dirtyForm ]]"
+    },
+    "yesButtonAction": {
+      "chains": [
+        {
+          "chainId": "YesButtonActionChain",
+          "parameters": {
+            "detail": "{{ $event.detail }}"
+          }
+        }
+      ]
+    },
+    "noButtonAction": {
+      "chains": [
+        {
+          "chainId": "NoButtonActionChain",
+          "parameters": {
+            "detail": "{{ $event.detail }}"
+          }
+        }
+      ]
+    },
+    "saveButtonAction": {
+      "chains": [
+        {
+          "chainId": "SaveButtonActionChain",
+          "parameters": {
+            "detail": "{{ $event.detail }}"
+          }
+        }
+      ]
+    }
+  },
+  "imports": {
+    "components": {
+      "oj-tab-bar": {
+        "path": "ojs/ojnavigationlist"
+      },
+      "oj-switcher": {
+        "path": "ojs/ojswitcher"
+      },
+      "oj-form-layout": {
+        "path": "ojs/ojformlayout"
+      },
+      "oj-input-text": {
+        "path": "ojs/ojinputtext"
+      },
+      "oj-button": {
+        "path": "ojs/ojbutton"
+      },
+      "oj-dialog": {
+        "path": "ojs/ojdialog"
+      }
+    }
+  }
+}

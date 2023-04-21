@@ -1,0 +1,9 @@
+    {
+        "id": "inputnumber-eating-chars",
+        "description": "Flow main",
+        "defaultPage": "inputnumber-eating-chars-start",
+        "chains": {},
+        "services": {},
+        "types": {},
+        "variables": {}
+    }

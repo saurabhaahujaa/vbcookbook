@@ -1,0 +1,77 @@
+{
+  "title": "Show UI When Ready Recipe",
+  "description": "",
+  "variables": {
+    "pageReady": {
+      "type": "boolean",
+      "defaultValue": false
+    },
+    "isSaveDisabled": {
+      "type": "boolean",
+      "defaultValue": false
+    },
+    "employee": {
+      "type": "get_Employee"
+    }
+  },
+  "metadata": {},
+  "types": {
+    "@decorators.get_Employee": {
+      "endpoint": "get_Employee",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "get_Employee": {
+      "createdBy": "string",
+      "creationDate": "string",
+      "departmentId": "number",
+      "email": "string",
+      "firstName": "string",
+      "hireDate": "string",
+      "id": "number",
+      "lastName": "string",
+      "lastUpdateDate": "string",
+      "lastUpdatedBy": "string",
+      "phoneNumber": "string",
+      "salary": "number"
+    }
+  },
+  "chains": {},
+  "eventListeners": {
+    "vbEnter": {
+      "chains": [
+        {
+          "chainId": "fetchEmployeeChain",
+          "parameters": {}
+        }
+      ]
+    },
+    "ojButtonOjAction": {
+      "chains": [
+        {
+          "chainId": "UpdateEmployeeChain",
+          "parameters": {
+            "detail": "{{ $event.detail }}"
+          }
+        }
+      ]
+    }
+  },
+  "imports": {
+    "components": {
+      "oj-label": {
+        "path": "ojs/ojlabel"
+      },
+      "oj-input-text": {
+        "path": "ojs/ojinputtext"
+      },
+      "oj-button": {
+        "path": "ojs/ojbutton"
+      },
+      "oj-form-layout": {
+        "path": "ojs/ojformlayout"
+      }
+    }
+  },
+  "constants": {}
+}

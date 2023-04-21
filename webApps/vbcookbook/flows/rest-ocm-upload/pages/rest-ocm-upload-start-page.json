@@ -1,0 +1,115 @@
+{
+  "title": "Oracle Content Management Recipe",
+  "description": "Manage OCM files",
+  "variables": {
+    "ocmFilesSDP": {
+      "type": "vb/ServiceDataProvider",
+      "defaultValue": {
+        "endpoint": "ocm/getFolderFiles",
+        "responseType": "FilesType",
+        "itemsPath": "items",
+        "keyAttributes": "id",
+        "uriParameters": {
+          "folderId": "self"
+        }
+      }
+    },
+    "filePreview": {
+      "type": "boolean",
+      "defaultValue": false
+    },
+    "fileBodyForPreview": {
+      "type": "any"
+    },
+    "ocmServerBusy": {
+      "type": "boolean",
+      "defaultValue": false
+    }
+  },
+  "types": {
+    "@decorators.FilesType": {
+      "endpoint": "getFolderFiles",
+      "service": "ocm",
+      "path": "response"
+    },
+    "FilesType": {
+      "items": [
+        {
+          "id": "string",
+          "mimeType": "string",
+          "name": "string",
+          "size": "string",
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "chains": {},
+  "eventListeners": {
+    "filePickerSelect": {
+      "chains": [
+        {
+          "chainId": "FilePickerSelectChain",
+          "parameters": {
+            "files": "[[ Array.prototype.slice.call($event.detail.files) ]]"
+          }
+        }
+      ]
+    },
+    "downloadClick": {
+      "chains": [
+        {
+          "chainId": "DownloadAttachment",
+          "parameters": {
+            "detail": "{{ $event.detail }}",
+            "key": "{{ $current.key }}",
+            "current": "{{ $current }}"
+          }
+        }
+      ]
+    },
+    "previewClick": {
+      "chains": [
+        {
+          "chainId": "PreviewAttachment",
+          "parameters": {
+            "detail": "{{ $event.detail }}",
+            "key": "{{ $current.key }}",
+            "current": "{{ $current }}"
+          }
+        }
+      ]
+    },
+    "deleteFileAction": {
+      "chains": [
+        {
+          "chainId": "DeleteFile",
+          "parameters": {
+            "detail": "{{ $event.detail }}",
+            "key": "{{ $current.key }}",
+            "current": "{{ $current }}"
+          }
+        }
+      ]
+    }
+  },
+  "imports": {
+    "components": {
+      "oj-form-layout": {
+        "path": "ojs/ojformlayout"
+      },
+      "oj-input-text": {
+        "path": "ojs/ojinputtext"
+      },
+      "oj-button": {
+        "path": "ojs/ojbutton"
+      },
+      "oj-table": {
+        "path": "ojs/ojtable"
+      },
+      "oj-file-picker": {
+        "path": "ojs/ojfilepicker"
+      }
+    }
+  }
+}

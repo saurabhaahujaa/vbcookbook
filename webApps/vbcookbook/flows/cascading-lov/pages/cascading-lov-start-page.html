@@ -1,0 +1,51 @@
+<!--
+ Copyright (c)2020, 2023, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+<div class="oj-sm-padding-2x oj-md-padding-8x recipe-desc">This recipe shows you how to implement cascading lists of values using the Select
+  Single (oj-select-single) component.</div>
+<div class="oj-flex oj-flex-item oj-md-margin-8x-start oj-md-margin-8x-end sample-box">
+  <div class="oj-flex oj-flex-item oj-sm-flex-direction-column sample-box2">
+    <div class="oj-flex">
+      <oj-form-layout label-edge="start" class="oj-flex-item oj-sm-12 oj-md-6">
+        <oj-select-single label-hint="Region" data="[[$page.variables.regionListSDP]]" item-text="regionName"
+          value-item="{{ $variables.selectedRegion }}" id="region-select"
+          on-value-item-changed="[[$listeners.regionSelectValueItem]]"></oj-select-single>
+        <oj-select-single label-hint="Country" class="oj-flex-item oj-sm-flex-initial"
+          data="[[$page.variables.countryListSDP]]" item-text="countryName"
+          value-item="{{ $variables.selectedCountry }}" id="country-select"
+          disabled="[[ !$variables.selectedRegion.key  ]]"
+          on-value-item-changed="[[$listeners.countrySelectValueItem]]"></oj-select-single>
+        <oj-select-single label-hint="Location " class="oj-flex-item oj-sm-flex-initial" item-text="city"
+          value-item="{{ $variables.selectedLocation }}" data="[[$page.variables.locationListSDP]]" id="location-select"
+          disabled="[[ !($variables.selectedRegion.key  && $variables.selectedCountry.key) ]]"></oj-select-single>
+        <oj-input-text label-hint="Postal Code" readonly="true"
+          value="{{ $variables.selectedLocation.data ? $variables.selectedLocation.data.postalCode : '' }}"
+          id="postalcode"></oj-input-text>
+      </oj-form-layout>
+    </div>
+    <div class="oj-flex">
+      <div class="oj-flex-item oj-sm-12 oj-md-2">
+        <oj-button on-oj-action="[[$listeners.resetAction]]" id="reset">Reset Values
+        </oj-button>
+      </div>
+      <div class="oj-flex-item oj-sm-12 oj-md-1"></div>
+      <div class="oj-flex-item oj-sm-12 oj-md-1">
+        <oj-button on-oj-action="[[$listeners.ojButtonOjAction]]" id="select-tokyo">Select Tokyo</oj-button>
+      </div>
+    </div>
+  </div>
+
+  <oj-bind-if test="[[ $application.variables.isThisVBDesigner === false ]]">
+    <div class="oj-flex oj-sm-flex-1 oj-md-flex-1"
+      :style.min-width="[[ $application.responsive.smOnly ? '360px' : '500px' ]]">
+      <div class="recipe-box oj-bg-neutral-20 oj-flex-item">
+        <h1 class="oj-typography-heading-lg">Recipe</h1>
+        <div class="recipe-body oj-helper-overflow-wrap-anywhere">
+          <oj-vb-content config="[[ vbRouterFlow ]]" class="oj-flex-item oj-sm-12 oj-md-12"></oj-vb-content>
+        </div>
+      </div>
+    </div>
+  </oj-bind-if>
+</div>

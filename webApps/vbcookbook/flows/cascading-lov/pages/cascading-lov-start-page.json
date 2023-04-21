@@ -1,0 +1,168 @@
+{
+  "title": "Cascading List of Values Recipe",
+  "description": "",
+  "variables": {
+    "countryListSDP": {
+      "type": "vb/ServiceDataProvider",
+      "defaultValue": {
+        "endpoint": "businessObjects/getall_Country",
+        "keyAttributes": "id",
+        "itemsPath": "items",
+        "responseType": "page:getallCountryResponse",
+        "transformsContext": {
+          "vb-textFilterAttributes": [
+            "countryName"
+          ]
+        },
+        "filterCriterion": {
+          "op": "$eq",
+          "attribute": "region",
+          "value": "{{ $variables.selectedRegion.key!=null ? $variables.selectedRegion.key : undefined  }}"
+        }
+      }
+    },
+    "isTokyoSelected": {
+      "type": "boolean",
+      "defaultValue": false
+    },
+    "locationListSDP": {
+      "type": "vb/ServiceDataProvider",
+      "defaultValue": {
+        "endpoint": "businessObjects/getall_Location",
+        "keyAttributes": "id",
+        "itemsPath": "items",
+        "responseType": "page:getallLocationResponse",
+        "filterCriterion": {
+          "op": "$eq",
+          "attribute": "locationCountry.id",
+          "value": "{{ $variables.selectedCountry.key!=null ? $variables.selectedCountry.key : undefined }}"
+        },
+        "transformsContext": {
+          "vb-textFilterAttributes": [
+            "city"
+          ]
+        }
+      }
+    },
+    "regionListSDP": {
+      "type": "vb/ServiceDataProvider",
+      "defaultValue": {
+        "endpoint": "businessObjects/getall_Region",
+        "keyAttributes": "id",
+        "itemsPath": "items",
+        "responseType": "page:getallRegionResponse",
+        "transformsContext": {
+          "vb-textFilterAttributes": [
+            "regionName"
+          ]
+        }
+      }
+    },
+    "selectedRegion": {
+      "type": "selectedObjectType"
+    },
+    "selectedCountry": {
+      "type": "selectedObjectType"
+    },
+    "selectedLocation": {
+      "type": "selectedObjectType"
+    }
+  },
+  "metadata": {},
+  "types": {
+    "getallLocationResponse": {
+      "items": [
+        {
+          "city": "string",
+          "country": "number",
+          "id": "number",
+          "postalCode": "string",
+          "stateProvince": "string",
+          "streetAddress": "string"
+        }
+      ]
+    },
+    "getallCountryResponse": {
+      "items": [
+        {
+          "countryName": "string",
+          "id": "number"
+        }
+      ]
+    },
+    "getallRegionResponse": {
+      "items": [
+        {
+          "id": "number",
+          "regionName": "string"
+        }
+      ]
+    },
+    "selectedObjectType": {
+      "data": "object",
+      "key": "number",
+      "metadata": "object"
+    }
+  },
+  "chains": {},
+  "eventListeners": {
+    "countrySelectValueItem": {
+      "chains": [
+        {
+          "chainId": "CountryValueItemChangeChain",
+          "parameters": {
+            "key": "{{$event.detail.value.key}}",
+            "previousKey": "{{ $event.detail.previousValue.key }}"
+          }
+        }
+      ]
+    },
+    "ojButtonOjAction": {
+      "chains": [
+        {
+          "chainId": "SelectTokyoActionChain",
+          "parameters": {
+            "detail": "{{ $event.detail }}"
+          }
+        }
+      ]
+    },
+    "regionSelectValueItem": {
+      "chains": [
+        {
+          "chainId": "RegionValueItemChangeChain",
+          "parameters": {
+            "key": "{{$event.detail.value.key}}",
+            "previousKey": "{{ $event.detail.previousValue.key }}"
+          }
+        }
+      ]
+    },
+    "resetAction": {
+      "chains": [
+        {
+          "chainId": "ResetValues",
+          "parameters": {
+            "detail": "{{ $event.detail }}"
+          }
+        }
+      ]
+    }
+  },
+  "imports": {
+    "components": {
+      "oj-form-layout": {
+        "path": "ojs/ojformlayout"
+      },
+      "oj-input-text": {
+        "path": "ojs/ojinputtext"
+      },
+      "oj-button": {
+        "path": "ojs/ojbutton"
+      },
+      "oj-select-single": {
+        "path": "ojs/ojselectsingle"
+      }
+    }
+  }
+}

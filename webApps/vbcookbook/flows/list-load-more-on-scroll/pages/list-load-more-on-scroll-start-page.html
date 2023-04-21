@@ -1,0 +1,50 @@
+<!--
+ Copyright (c)2020, 2023, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+<div class="oj-sm-padding-2x oj-md-padding-8x recipe-desc">
+ 
+  List View pagination using <b>loadMoreOnScroll</b> policy
+ 
+</div>
+<div class="oj-flex oj-flex-item oj-md-margin-8x-start oj-md-margin-8x-end sample-box">
+  <div class="oj-flex oj-flex-item oj-sm-flex-direction-column sample-box2">
+ 
+<!--   START -->
+<div class="oj-flex">
+  <h1 class="oj-flex-item oj-sm-12 oj-md-12">Employee List</h1>
+</div>
+<div class="oj-flex">
+  <oj-list-view style="max-height: 500px;" class="oj-flex-item oj-sm-12 oj-md-12" data="[[$page.variables.employeeListSDP]]" scroll-policy="loadMoreOnScroll" scroll-policy-options.fetch-size="15" scroll-policy-options.max-count="1000"  selection-mode="single">
+    <template slot="itemTemplate">
+      <oj-vb-list-item>
+        <div slot="image">
+          <oj-avatar aria-label="User Avatar" role="img" size="xs" background="[[$functions.getBackground()]]" initials='[[$functions.getInitials($current.data.firstName, $current.data.lastName)]]'></oj-avatar>
+        </div>
+        <div slot="title1">
+          <oj-bind-text value="[[ $current.data.firstName +' '+$current.data.lastName ]]"></oj-bind-text>
+        </div>
+        <div slot="title2">
+          <a :href="[['mailto: '+$current.data.email]]" ><oj-bind-text value="[[ $current.data.email ]]"></oj-bind-text></a>
+        </div>
+      </oj-vb-list-item>
+    </template>
+  </oj-list-view>
+</div>
+
+<!-- END -->
+ 
+  </div>
+  <oj-bind-if test="[[ $application.variables.isThisVBDesigner === false ]]">
+    <div class="oj-flex oj-sm-flex-1 oj-md-flex-1"
+      :style.min-width="[[ $application.responsive.smOnly ? '360px' : '500px' ]]">
+      <div class="recipe-box oj-bg-neutral-20 oj-flex-item">
+        <h1 class="oj-typography-heading-lg">Recipe</h1>
+        <div class="recipe-body oj-helper-overflow-wrap-anywhere">
+          <oj-vb-content config="[[ vbRouterFlow ]]" class="oj-flex-item oj-sm-12 oj-md-12"></oj-vb-content>
+        </div>
+      </div>
+    </div>
+  </oj-bind-if>
+</div>

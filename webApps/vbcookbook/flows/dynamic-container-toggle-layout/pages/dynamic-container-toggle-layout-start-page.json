@@ -1,0 +1,165 @@
+{
+  "title": "Dynamic Container Recipe",
+  "description": "",
+  "variables": {
+    "employee": {
+      "type": "page:getEmployeeResponse"
+    },
+    "employeeDetailFormLoadingStatus": {
+      "type": "string",
+      "defaultValue": "pending"
+    },
+    "employeeDetailFormRenderedFields": {
+      "type": "any[]",
+      "onValueChanged": {
+        "chains": [
+          {
+            "chainId": "loadEmployeeChain",
+            "parameters": {
+              "fetchedFields": "[[ $variables.employeeDetailFormRenderedFields ]]"
+            }
+          }
+        ]
+      }
+    },
+    "employeeListSDP": {
+      "type": "vb/ServiceDataProvider",
+      "defaultValue": {
+        "endpoint": "businessObjects/getall_Employee",
+        "keyAttributes": "id",
+        "itemsPath": "items",
+        "responseType": "getallEmployeeResponse"
+      }
+    },
+    "layoutFlag": {
+      "type": "boolean",
+      "defaultValue": true
+    }
+  },
+  "metadata": {
+    "businessObjectsGetallEmployeeMetadata": {
+      "type": "vb/DynamicLayoutMetadataProviderDescriptor",
+      "defaultValue": {
+        "endpoint": "businessObjects/getall_Employee",
+        "metadataPath": "items"
+      }
+    },
+    "businessObjectsGetEmployeeMetadata": {
+      "type": "vb/DynamicLayoutMetadataProviderDescriptor",
+      "defaultValue": {
+        "endpoint": "businessObjects/get_Employee"
+      }
+    },
+    "dynamicContainerMetadata": {
+      "type": "vb/ContainerMetadataProviderDescriptor"
+    }
+  },
+  "types": {
+    "@decorators.getallEmployeeResponse": {
+      "endpoint": "getall_Employee",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "@decorators.getEmployeeResponse": {
+      "endpoint": "get_Employee",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "getallEmployeeResponse": {
+      "items": "object[]"
+    },
+    "getEmployeeResponse": "object"
+  },
+  "chains": {},
+  "eventListeners": {
+    "ojButtonOjAction2": {
+      "chains": [
+        {
+          "chainId": "ToggleLayout"
+        }
+      ]
+    }
+  },
+  "imports": {
+    "components": {
+      "oj-button": {
+        "path": "ojs/ojbutton"
+      },
+      "oj-dyn-container": {
+        "path": "oj-dyn/container/loader"
+      }
+    }
+  },
+  "layouts": {
+    "containerLayout1": {
+      "layoutType": "container",
+      "label": "Container Ruleset 1",
+      "rules": [
+        "containerLayout1-rule2",
+        "containerLayout1-rule1"
+      ],
+      "layouts": {
+        "case1": {
+          "layoutType": "container",
+          "label": "Case 1",
+          "layout": {
+            "sectionTemplateMap": {
+              "section1": "formExample",
+              "section2": "tableExample"
+            },
+            "displayProperties": [
+              "section1",
+              "section2"
+            ]
+          }
+        },
+        "case2": {
+          "layoutType": "container",
+          "label": "Case 2",
+          "layout": {
+            "displayProperties": [
+              "section1",
+              "section2"
+            ],
+            "sectionTemplateMap": {
+              "section1": "tableExample",
+              "section2": "formExample"
+            }
+          }
+        }
+      }
+    },
+    "containerLayout1-rule1": {
+      "expression": "[[ $variables.layoutFlag == true ? 'case1' : null ]]"
+    },
+    "containerLayout1-rule2": {
+      "expression": "[[ $variables.layoutFlag == false ? 'case2' : null ]]"
+    }
+  },
+  "templates": {
+    "formExample": {
+      "title": "Form Example",
+      "description": "",
+      "extensible": "byReference",
+      "@dt": {
+        "type": "section",
+        "layout": "containerLayout1"
+      },
+      "dependencies": [
+        "oj-dyn/form/loader"
+      ]
+    },
+    "tableExample": {
+      "title": "Table Example",
+      "description": "",
+      "extensible": "byReference",
+      "@dt": {
+        "type": "section",
+        "layout": "containerLayout1"
+      },
+      "dependencies": [
+        "oj-dynamic/table/loader"
+      ]
+    }
+  }
+}

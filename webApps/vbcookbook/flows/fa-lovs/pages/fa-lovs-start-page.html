@@ -1,0 +1,170 @@
+<!--
+ Copyright (c)2020, 2023, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+<div class="oj-sm-padding-2x oj-md-padding-8x recipe-desc">
+  This recipe shows dynamic choice list renders in combox-box with an advance
+  search
+  where user can select filtered record.
+</div>
+<div class="oj-flex oj-md-margin-8x-start oj-md-margin-8x-end sample-box">
+  <div class="oj-flex-item oj-sm-flex-direction-column sample-box2" style="overflow-x: auto">
+    <div class="oj-flex">
+      <div class="oj-flex-item oj-sm-12 oj-md-12">
+        <oj-label for="employee-list-dropdown">Employee</oj-label>
+      </div>
+      <oj-bind-if test="[[ !$variables.selectedEmployee.key ]]">
+      <div class="oj-flex-item oj-flex oj-sm-12 oj-sm-flex-wrap-nowrap">
+        <oj-button display="icons"
+          on-oj-action="[[$listeners.employeeAdvSearch]]" class="oj-flex-item oj-sm-flex-initial oj-sm-margin-2x-end" id="searchicon" style="margin-top:5px;">
+          Search Employee
+          <span slot="startIcon"
+            class="vb-icon vb-icon-search-magnifying-glass"></span>
+        </oj-button>
+        <oj-select-single label-hint="Select employee"
+          class="oj-flex-item oj-sm-flex-initial"
+          data="[[$page.variables.employeeListSDP]]" item-text="[[ $functions.optionRenderer ]]"
+          value-item="{{ $variables.selectedEmployee }}" id="selectemployee"></oj-select-single>
+      </div>
+      </oj-bind-if>
+
+
+      <oj-bind-if test="[[ $variables.selectedEmployee.key ]]">
+      <div class="oj-flex-item oj-flex oj-sm-align-items-center oj-sm-12 oj-sm-flex-wrap-nowrap">
+        <oj-button display="icons" on-oj-action="[[$listeners.spanClick]]"
+          class="oj-flex-item oj-sm-flex-initial oj-sm-margin-2x-end" chroming="outlined" id="close">
+          <span slot="startIcon"
+            class="vb-icon vb-icon-delete"></span>
+        </oj-button>
+        <oj-input-text class="oj-flex-item"
+          aria-label="Employee" id="employee-readonly"
+          value="{{ $variables.selectedEmployee.data.firstName + ' '+  $variables.selectedEmployee.data.lastName}}"
+          readonly="true">
+        </oj-input-text>
+      </div>
+      </oj-bind-if>
+    </div>
+    <oj-dialog style="display: none; width: 70vw; height: 100vh;"
+      dialog-title="Advance Search" id="advanced-search-oj-dialog">
+      <oj-toolbar chroming="solid" slot="footer"
+        class="oj-flex-item oj-sm-12 oj-md-12">
+        <oj-button class="oj-flex-bar-end"
+          on-oj-action="[[$listeners.okojButtonOjAction]]"
+          disabled="[[ !$variables.selectedRow.key ]]" chroming="callToAction"
+          display="icons" id="OK">OK
+        </oj-button>
+
+        <oj-button on-oj-action="[[$listeners.cancelojButtonOjAction]]"
+          chroming="callToAction" id="cancel">Cancel</oj-button>
+
+      </oj-toolbar>
+      <div slot="body">
+
+        <div class="oj-flex">
+          <div
+            class="oj-panel oj-sm-padding-2x oj-flex-item oj-sm-12 oj-md-12">
+
+            <div class="oj-flex">
+              <oj-form-layout label-edge="inside"
+                class="oj-flex-item oj-sm-12" max-columns="2">
+                <oj-input-text label-hint="First Name"
+                  value="{{ $variables.filters[0].value }}" id="firstname">
+                </oj-input-text>
+                 <oj-input-text label-hint="Last Name"
+                  value="{{ $variables.filters[1].value }}"></oj-input-text>
+                <oj-select-single label-hint="Department"
+                  data="[[$page.variables.departmentListSDP]]"
+                  item-text="departmentName"
+                  value="{{ $variables.filters[2].value }}"></oj-select-single>
+                <oj-input-number label-hint="Salary from"
+                  value="{{ $variables.filters[4].value }}"></oj-input-number>
+               <oj-select-many label-hint="Skill(s)"
+                  options="[[$page.variables.skillListSDP]]"
+                  options-keys.value="id" options-keys.label="name"
+                  value="{{ $variables.filters[3].value }}"></oj-select-many>
+                <oj-input-number label-hint="Salary to"
+                  value="{{ $variables.filters[5].value }}"></oj-input-number>
+              </oj-form-layout>
+            </div>
+            <div class="oj-flex">
+              <oj-toolbar chroming="solid"
+                class="oj-flex-item oj-sm-12 oj-md-12">
+                <oj-button class="oj-flex-bar-end"
+                  on-oj-action="[[$listeners.searchojButtonOjAction]]"
+                  chroming="callToAction" id="search">Search</oj-button>
+                <oj-button on-oj-action="[[$listeners.resetojButtonOjAction]]"
+                  chroming="callToAction" id="reset">Reset</oj-button>
+
+              </oj-toolbar>
+
+
+            </div>
+
+          </div>
+        </div>
+        <div class="oj-panel oj-sm-padding-2x">
+          <div class="oj-flex">
+            <oj-table selection-mode='{"row": "single"}'
+              columns='[{"Select":"cellTemplate","template":"cellTemplate"},
+  {"headerText":"First Name","field":"firstName"},
+  {"headerText":"Last Name","field":"lastName"},
+  {"headerText":"Department Name","field":"departmentObject","sortProperty":"departmentObject.departmentName","template":"departmentNameCellTemplate3"},
+  {"headerText":"Skill(s)","field":"skillCollection","sortProperty":"skillCollection.name","template":"nameCellTemplate4"},{"headerText":"Salary","field":"salary","template":"Salary"}]'
+              data="[[$page.variables.AdvanceSearchEmployeeListSDP]]"
+              scroll-policy="loadMoreOnScroll"
+              scroll-policy-options='{"fetchSize": 10}'
+              style="width: 100%; height: 200px;"
+              first-selected-row="{{ $variables.selectedRow}}"
+              id="employee-records">
+              <template slot="Salary">
+                <oj-bind-text
+                  value="[[ $functions.formatCurrency($current.data) ]]">
+                </oj-bind-text>
+              </template>
+
+
+
+              <template slot="departmentNameCellTemplate3">
+                <oj-bind-text
+                  value="[[ $current.data.items.map(function(r){return r.departmentName}).join(', ') ]]">
+                </oj-bind-text>
+              </template>
+              <template slot="nameCellTemplate4">
+                <oj-bind-text
+                  value="[[ $current.data.items.map(function(r){return r.name}).join(', ') ]]">
+                </oj-bind-text>
+              </template>
+
+              <template slot="cellTemplate">
+
+                <oj-radioset
+                  value="[[$current.row.id === $page.variables.selectedRow.key ]]">
+
+                  <oj-option value="[[true]]"></oj-option>
+
+                </oj-radioset>
+
+              </template>
+
+            </oj-table>
+          </div>
+        </div>
+
+      </div>
+
+    </oj-dialog>
+  </div>
+
+  <oj-bind-if test="[[ $application.variables.isThisVBDesigner === false ]]">
+    <div class="oj-flex oj-sm-flex-1 oj-md-flex-1"
+      :style.min-width="[[ $application.responsive.smOnly ? '360px' : '500px' ]]">
+      <div class="recipe-box oj-bg-neutral-20 oj-flex-item">
+        <h1 class="oj-typography-heading-lg">Recipe</h1>
+        <div class="recipe-body oj-helper-overflow-wrap-anywhere">
+          <oj-vb-content config="[[ vbRouterFlow ]]" class="oj-flex-item oj-sm-12 oj-md-12"></oj-vb-content>
+        </div>
+      </div>
+    </div>
+  </oj-bind-if>
+</div>

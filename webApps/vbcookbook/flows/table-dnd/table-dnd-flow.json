@@ -1,0 +1,10 @@
+{
+
+  "id": "table-dnd",
+  "description": "Flow main",
+  "defaultPage": "table-dnd-start",
+  "chains": {},
+  "services": {},
+  "types": {},
+  "variables": {}
+}

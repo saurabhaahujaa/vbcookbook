@@ -1,0 +1,304 @@
+<!--
+ Copyright (c)2020, 2023, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+<p>
+  Oracle JET provides <a target="_blank"
+    href="https://www.oracle.com/webfolder/technetwork/jet/jsdocs/RowDataGridProvider.html"><code>RowDataGridProvider</code></a>
+  that can be wrapped around an underlying Data Provider to use with Data Grid. You first create an instance of the 
+  RowDataGridProvider using a data array and then create functions to style the component, and then finally add the 
+  component to the page where you set test conditions to determine if a cell or header has to be styled.
+</p>
+
+<div class="oj-flex">
+  <oj-accordion class="oj-flex-item oj-sm-12 oj-md-12" multiple="true">
+    <oj-collapsible id="step-1">
+      <span slot="header">Build the Data Array And Data Provider for the Data Grid</span>
+      <div>
+        <ol>
+          <li>In the JavaScript tab of your page, add the following dependencies.
+            <pre>
+define(["ojs/ojrowdatagridprovider", "ojs/ojarraydataprovider", "text!datagrid/customer-data.json", "ojs/ojconverter-datetime", "ojs/ojconverter-number", "ojs/ojdatagridprovider", "ojs/ojdatagrid"],
+  function (RowDataGridProvider, ArrayDataProvider, jsonData, ojconverter_datetime, ojconverter_number) {
+    'use strict';</pre>
+          </li>
+          <li>
+            Parse the data from <code>customer-data.json</code> using <code>JSON.parse</code> to create an ArrayDataProvider. Add the following code to the page constructor:
+            <oj-collapsible id="addData">
+              <a href="" slot="header">Expand to view code</a>
+              <div>
+                <pre>
+var PageModule = function PageModule() {
+  this.colHeaders = [
+    "First Name",
+    "Last Name",
+    "Balance",
+    "Registered",
+    "Total Amount Ordered",
+    "Last Order",
+    "Company",
+    "Short Name",
+    "Phone",
+    "Country origin",
+    "Gender",
+    "Age",
+    "Birth Date",
+    "Active",
+    "Eye Color"
+  ];
+  this.jsonData = JSON.parse(jsonData);
+  this.adp = new ArrayDataProvider(this.jsonData);
+};
+  </pre>
+              </div>
+            </oj-collapsible>
+          </li>
+          <li>In the Variables tab of your page, create a variable named <code>data</code> of type <code>Any</code>.
+          </li>
+          <li>In the Event Listeners tab of your page, add a <code>vbEnter</code> lifecycle event listener and create an
+            action chain. </li>
+          <li>In the action chain, add a Call Function action and, in the Properties pane, click <strong>Create</strong>
+            beside the Function Name field to create a new function named <code>getDatagridData</code> to convert the
+            adp to a RowDataGridProvider for the Data Grid component and return the <code>dataGridProvider</code>.
+            <pre>
+    PageModule.prototype.getDatagridData = function () {
+      let dataGridProvider = new RowDataGridProvider.RowDataGridProvider(this.adp,
+      {
+        columns: {
+          rowHeader: ['index']
+        },
+        columnHeaders: {
+          column: this.colHeaders
+        }
+      });
+      return dataGridProvider;
+    };
+</pre>
+          </li>
+          <li>Add an Assign Variable action and assign the result of the <code>getDatagridData</code> function to the
+            <code>data</code> page variable.
+          </li>
+        </ol>
+      </div>
+    </oj-collapsible>
+
+    <oj-collapsible id="step-3">
+      <span slot="header">Create Functions to Style the Data Grid</span>
+      <div>
+        <ol>
+          <li>In the JavaScript tab of your page, add code to the <code>PageModule</code> constructor to align text and
+            set header widths for columns.
+            <oj-collapsible id="addColStyle">
+              <a href="" slot="header">Expand to view code</a>
+              <div>
+                <pre>
+  this.numericFields = [2, 3, 4, 5, 8]; //index of numeric columns
+  this.columnHeaderStyle = (headerContext) => {
+    const columnKey = headerContext.index;
+    if (columnKey === 8) {
+      return "width:175px";
+    }
+    else if (columnKey === 4) {
+      return "width:150px";
+    }
+    else if (columnKey === 9) {
+      return "width:220px;";
+    }
+    else if (columnKey === 11 || columnKey === 13) {
+      return "width:100px;";
+    }
+    return "width:125px;";
+  };
+  this.getColumnHeaderClassName = (headerContext) => {
+    return this.getAlignmentClassNameByIndex(headerContext.index, null);
+  };
+  this.getCellClassName = (cellContext) => {
+    return this.getAlignmentClassNameByIndex(cellContext.indexes.column, cellContext.indexes.row);
+  };
+  this.getAlignmentClassNameByIndex = (colIndex, rowIndex) => {
+    let styleClass = "";
+    if (this.numericFields.includes(colIndex)) {
+      styleClass += "oj-helper-justify-content-right";
+    }
+    else if (colIndex === 13) {
+      styleClass += "oj-helper-justify-content-center";
+    }
+    else {
+      styleClass += "oj-sm-justify-content-flex-start";
+    }
+    if (rowIndex && (rowIndex + 1) % 5 === 0) {
+      styleClass += " oj-typography-bold oj-bg-neutral-30";
+    }
+    return styleClass;
+  };  
+</pre>
+              </div>
+            </oj-collapsible>
+          </li>
+          <li>Add page functions to align text and set header widths.
+            <oj-collapsible id="addPageFunc">
+              <a href="" slot="header">Expand to view code</a>
+              <div>
+                <pre>
+PageModule.prototype.getCellClassName = function () {
+   return this.getCellClassName;
+};
+PageModule.prototype.columnHeaderStyle = function () {
+   return this.columnHeaderStyle;
+};
+PageModule.prototype.getColumnHeaderClassName = function () {
+   return this.getColumnHeaderClassName;
+};
+</pre>
+              </div>
+            </oj-collapsible>
+          </li>
+          <li>Add date and number converters to the <code>PageModule</code> constructor.
+            <oj-collapsible id="addConverters">
+              <a href="" slot="header">Expand to view code</a>
+              <div>
+                <pre>
+this.dateConverter = new ojconverter_datetime.IntlDateTimeConverter({
+        formatType: "date",
+        dateFormat: "medium",
+  });
+this.numberConverter = new ojconverter_number.IntlNumberConverter({
+        style: "currency",
+        currency: "USD",
+        currencyDisplay: "symbol",
+  });
+this.formatDate = (dateString) => {
+        const trimmedDate = dateString.substring(0, dateString.length - 7);
+        return new Date(trimmedDate).toISOString();
+  };
+</pre>
+              </div>
+            </oj-collapsible>
+          </li>
+          <li>Add page functions to render the date and number converters.
+            <oj-collapsible id="renderConverters">
+              <a href="" slot="header">Expand to view code</a>
+              <div>
+                <pre>
+PageModule.prototype.numberConverter = function () {
+  return this.numberConverter;
+};
+PageModule.prototype.dateConverter = function () {
+  return this.dateConverter;
+};
+</pre>
+              </div>
+            </oj-collapsible>
+          </li>
+        </ol>
+      </div>
+    </oj-collapsible>
+    <oj-collapsible id="step-4">
+      <span slot="header">Add the Data Grid Component to the Page</span>
+      <div>
+        <ol>
+          <li>
+            In the Code view of the Page Designer, add an empty <code>oj-data-grid</code>
+            tag, then add the following properties:
+            <ul>
+              <li><code>id</code> to value <code>datagrid</code></li>
+              <li>
+                <code>style</code> to value
+                <code>width:100%;
+      min-height:25rem;
+      height:calc(75vh - 10px);
+      min-width: 300px</code>
+              </li>
+              <li>
+                <code>aria-label</code> to value <code>Data Grid Cell Based Grid Demo</code>
+              </li>
+              <li>
+                <code>data</code> to value
+                <code>[[ $page.variables.data ]]</code>
+              </li>
+              <li><code>header.column.resizable</code> to value <code>'{"width":"enable", "height":"enable"}'</code>
+              </li>
+              <li><code>header.row.resizable</code> to value <code>'{"width":"enable", "height":"enable"}'</code></li>
+              <li><code>header.column.class-name</code> to value <code>"[[$functions.getColumnHeaderClassName]]"</code>
+              </li>
+              <li><code>header.column.style</code> to value <code>"[[$functions.columnHeaderStyle]]"</code></li>
+              <li><code>header.row.style</code> to value <code>"width:50px;"</code></li>
+              <li><code>cell.class-name</code> to value <code>"[[$functions.getCellClassName]]"</code></li>
+            </ul>
+          </li>
+          <li>Use a <code>cellTemplate</code> to render the cell content you want and use <code>oj-bind-if</code> to
+            conditionally style the columns based on column index.
+            <p>For example, the Balance column renders as follows.</p>
+            <pre>
+  &ltoj-bind-if test="[[cell.item.columnIndex==$constants.colBalance ]]">
+    &ltspan :class="[[cell.item.data.data > 0 ? 'oj-bg-success-30' : 'oj-bg-danger-30']]">
+      &ltoj-bind-text value="[[$page.functions.numberConverter.format(cell.item.data.data)]]">&lt/oj-bind-text>
+    &lt/span>
+  &lt/oj-bind-if>
+            </pre>
+            Also use <code>oj-bind-if</code> for the other columns where styling is not required.
+            <pre>
+&ltoj-bind-if
+  test="[[cell.item.columnIndex!==$constants.colBalance && cell.item.columnIndex!==$constants.colRegistered 
+          && cell.item.columnIndex!==$constants.colTotalAmtOrdered && cell.item.columnIndex!==$constants.colLastOrder 
+          && cell.item.columnIndex!==$constants.colCompany && cell.item.columnIndex!==$constants.colBirthDate 
+          && cell.item.columnIndex!==$constants.colActive && cell.item.columnIndex!==$constants.colEyeColor]]">
+  &ltspan>
+    &ltoj-bind-text value="[[cell.item.data.data]]">&lt/oj-bind-text>
+  &lt/span>
+&lt/oj-bind-if>
+                        </pre>
+          </li>
+          <li>
+            <p>In the Variables tab of your page, add constants for the columns and add the default values as index of
+              columns. </p>
+            <p>The following entries show what is generated in the JSON tab of your page when you add these constants.
+            </p>
+            <oj-collapsible id="constants">
+              <a href="" slot="header">Expand to view code</a>
+              <div>
+                <pre>
+"constants": {
+    "colBalance": {
+      "type": "number",
+      "defaultValue": 2
+    },
+    "colTotalAmtOrdered": {
+      "type": "number",
+      "defaultValue": 4
+    },
+    "colCompany": {
+      "type": "number",
+      "defaultValue": 6
+    },
+    "colRegistered": {
+      "type": "number",
+      "defaultValue": 3
+    },
+    "colLastOrder": {
+      "type": "number",
+      "defaultValue": 5
+    },
+    "colBirthDate": {
+      "type": "number",
+      "defaultValue": 12
+    },
+    "colActive": {
+      "type": "number",
+      "defaultValue": 13
+    },
+     "colEyeColor": {
+      "type": "number",
+      "defaultValue": 14
+    }
+  }
+</pre>
+              </div>
+            </oj-collapsible>
+          </li>
+        </ol>
+      </div>
+    </oj-collapsible>
+  </oj-accordion>
+</div>

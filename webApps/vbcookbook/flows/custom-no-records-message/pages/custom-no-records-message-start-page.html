@@ -1,0 +1,62 @@
+<!--
+ Copyright (c)2020, 2023, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+<div class="oj-sm-padding-2x oj-md-padding-8x recipe-desc">
+	This recipe shows you how to display a custom message when a table displays an empty data
+	set.
+</div>
+<div class="oj-flex oj-flex-item oj-md-margin-8x-start oj-md-margin-8x-end sample-box">
+	<div class="oj-flex oj-flex-item oj-sm-flex-direction-column sample-box2">
+		<div class="oj-flex">
+			<div class="oj-flex-item oj-sm-12 oj-md-2">
+				<oj-button id="filter-button" on-oj-action="[[$listeners.filterButtonOjAction]]">Query That Returns No
+					Results</oj-button>
+			</div>
+		</div>
+		<div class="oj-flex oj-sm-flex-0">
+			<div class="oj-flex oj-sm-flex-direction-column oj-flex-item oj-sm-flex-initial oj-sm-align-items-flex-start"
+     style="padding-right:30px;">
+				<hr class="oj-flex-item oj-sm-flex-initial">
+				<h6 class="oj-flex-item oj-sm-flex-initial">Custom Message from Property Value</h6>
+				<oj-table scroll-policy="loadMoreOnScroll" data="[[$page.variables.employeeListSDP]]"
+					columns='[{"headerText":"First Name","field":"firstName"},{"headerText":"Last Name","field":"lastName"}]'
+					id="employee-table2" style="max-height: 300px" translations.msg-no-data="My Custom No Data Message"
+					class="oj-flex-item oj-sm-flex-initial">
+				</oj-table>
+			</div>
+
+			<div class="oj-flex oj-sm-flex-direction-column oj-flex-item oj-sm-flex-initial oj-sm-align-items-flex-start">
+				<hr class="oj-flex-item oj-sm-flex-initial">
+				<h6 class="oj-flex-item oj-sm-flex-initial">Custom Message from a Slot</h6>
+				<oj-table scroll-policy="loadMoreOnScroll" data="[[$page.variables.employeeListSDP]]"
+					columns='[{"headerText":"First Name","field":"firstName"},{"headerText":"Last Name","field":"lastName"}]'
+					id="employee-table3" style="max-height: 300px" class="oj-flex-item">
+					<template slot="noData">
+						<div class="oj-flex oj-sm-flex-direction-column oj-sm-align-items-center">
+							<div class="oj-flex-item">
+								<span style="font-size: 1.5rem; color:red; padding-right: 10px" class="vb-icon vb-icon-warning"></span>
+								<span style="color:red;">There is no data to display.</span>
+							</div>
+							<div class="oj-flex-item">
+								<oj-button on-oj-action="[[$listeners.ojButtonOjAction]]">Refresh Query</oj-button>
+							</div>
+						</div>
+					</template>
+				</oj-table>
+			</div>
+		</div>
+	</div>
+
+	 <oj-bind-if test="[[ $application.variables.isThisVBDesigner === false ]]">
+    <div class="oj-flex oj-sm-flex-1 oj-md-flex-1" :style.min-width="[[ $application.responsive.smOnly ? '360px' : '500px' ]]">
+      <div class="recipe-box oj-bg-neutral-20 oj-flex-item">
+        <h1 class="oj-typography-heading-lg">Recipe</h1>
+        <div class="recipe-body oj-helper-overflow-wrap-anywhere">
+          <oj-vb-content config="[[ vbRouterFlow ]]" class="oj-flex-item oj-sm-12 oj-md-12"></oj-vb-content>
+        </div>
+      </div>
+    </div>
+  </oj-bind-if>
+</div>

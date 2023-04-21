@@ -1,0 +1,62 @@
+<!--
+ Copyright (c)2020, 2023, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+<p>Add a Rating Gauge component to a Table component’s column to highlight values in the table relative to threshold
+  values that you specify in the Rating Gauge component.
+</p>
+<div class="oj-flex">
+  <oj-accordion class="oj-flex-item oj-sm-12 oj-md-12">
+    <oj-collapsible id="step1" expanded="true">
+      <h1 slot="header">Add a Table Component</h1>
+
+      <div>
+        <ol>
+          <li>In the Component Palette, drag a Table component and drop it on the page.</li>
+          <li>Use the Table component's <a target="_blank"
+              href="https://docs.oracle.com/en/cloud/paas/integration-cloud/visual-developer/design-pages.html#GUID-34A69EF1-56C0-462A-83FB-D3F5948CFA3D">Add
+              Data Quick Start</a> to add data to your table.
+          </li>
+        </ol>
+      </div>
+    </oj-collapsible>
+  </oj-accordion>
+</div>
+<div class="oj-flex">
+  <oj-accordion class="oj-flex-item oj-sm-12 oj-md-12">
+    <oj-collapsible id="step2">
+      <h1 slot="header">Add a Rating Gauge Component</h1>
+      <div>
+        <ol>
+          <li>In the Component Palette, drag a Rating Gauge component and drop it on the Rating column of the Table
+            component.</li>
+          <li>In the Data tab of the Properties pane for the Rating Gauge component, set the following property values:
+            <ul>
+              <li>Value: <code>[[$current.data]]</code></li>
+              <li>selected-state.color: <code>"[[ $functions.getRatingColor($current.data) ]]"</code></li>
+            </ul>
+            <p>This adjusts the rating gauge color based on the value in the Rating column.</p>
+          </li>
+          <li>In the JavaScript tab, add a new <code>function getRatingColor( value )</code> and return a custom color based on the input value.
+          <pre>
+PageModule.prototype.getRatingColor = function (value) {
+    if (value >= 0 && value <= 1) {
+      return 'red';
+    } else if (value > 1 && value <= 2) {
+      return 'pink';
+    } else if (value > 2 && value <= 3) {
+      return 'orange';
+    } else if (value > 3 && value <= 4) {
+      return 'blue';
+    } else if (value > 4) {
+      return 'green';
+    }
+  }
+          </pre>
+          </li>
+        </ol>
+      </div>
+    </oj-collapsible>
+  </oj-accordion>
+</div>

@@ -1,0 +1,321 @@
+<!--
+ Copyright (c)2020, 2023, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+<p>For the navigation menu to work, flows in the app need to correspond to IDs specified in the JSON data that populate
+  the menu. For example, <code>home</code>, <code>download</code>, and <code>quickstart</code>. Populate the JSON data
+  with the flow IDs. </p>
+
+<div class="oj-flex">
+  <oj-accordion class="oj-flex-item oj-sm-12 oj-md-12" multiple="true">
+    <oj-collapsible id="step-1" expanded="true">
+      <h1 slot="header">Add a Menu Icon</h1>
+      <div>
+        <ol>
+          <li>Create a page variable <code>openDrawer</code> of type Boolean and set the default value to
+            <code>[[ $application.responsive.lgUp ]]</code>.
+          </li>
+          <li>Open the <code>shell-page.html</code> of your app, and in the content of the <code>header</code> element, locate the
+            <code>div</code> with the <code>oj-flex-bar-middle</code> class. Replace this <code>div</code> with the
+            following content that adds a Button component, the <code>oj-ux-ico-menu</code> menu icon, the responsive
+            app name, and aligns the header to the left.
+            <oj-collapsible id="expand-menu">
+              <a href="" slot="header">Expand to view code</a>
+              <pre>
+&lt;div class="oj-flex-bar-start oj-sm-align-items-center">
+    &lt;oj-button id="toggleNavListButton" class="toggleNavListButton oj-button-lg" chroming="borderless"
+      display="icons">
+      &lt;span slot="startIcon" class="oj-ux-ico-menu">&lt;/span>
+        &lt;span>Application Navigation&lt;/span>
+    &lt;/oj-button>
+      &lt;span
+        class="oj-flex-item oj-typography-body-md oj-typography-bold oj-sm-padding-2x-start oj-sm-only-hide">Long Application Name&lt;/span>
+      &lt;span
+        class="oj-flex-item oj-typography-body-md oj-typography-bold oj-sm-padding-2x-start oj-md-hide">Short Name&lt;/span>
+&lt;/div>
+</pre>
+            </oj-collapsible>
+          </li>
+          <li>
+            In the Events tab of the Button component's Properties pane, create an ojAction event.
+          </li>
+
+          <li>Set the name of the generated action chain to <code>ToggleeNavListActionChain</code>.</li>
+          <li>Add an Assign Variable action to the action chain and assign the <code>!$page.variables.openDrawer</code>
+            value to the <code>openDrawer</code> page variable.</li>
+
+        </ol>
+      </div>
+    </oj-collapsible>
+    <oj-collapsible id="step-2">
+      <h1 slot="header">Add a Navigation List in Drawer Layout</h1>
+      <div>
+        <ol>
+          <li>Locate the div with the <code>oj-web-applayout-content-nopad oj-flex</code> class and replace the content inside
+            it with the following code which adds a drawer layout and a navigation list.
+            <oj-collapsible id="expand-drawer-code">
+              <a href="" slot="header">Expand to view code</a>
+              <pre>
+  &lt;oj-drawer-layout start-opened="{{ $page.variables.openDrawer }}" class="drawer-layout" id="drawer-layout">
+    &lt;div slot="start" class="oj-contrast-marker oj-contrast-background" style="min-width:300px; height:100%">
+      &lt;div class="oj-flex drawer-header">
+        &lt;div class="oj-flex-item">
+          &lt;span
+            class="oj-flex-item oj-typography-heading-sm oj-typography-bold oj-sm-padding-2x-start">Welcome&lt;/span>
+        &lt;/div>
+        &lt;oj-button id="buttonCloser" display="icons" chroming="borderless"
+            on-oj-action="[[$listeners.buttonAction2]]">
+          &lt;span slot="startIcon" class="oj-ux-ico-close oj-typography-heading-sm oj-typography-bold">&lt;/span>
+            Close
+        &lt;/oj-button>
+      &lt;/div>
+      <!-- navigation list -->
+    &lt;/div>
+    &lt;oj-vb-content id="vbRouterContent" class="vbcs-pages-module recipe-area oj-flex-item"
+            style="overflow-x: auto; width: 100%" config="[[vbRouterFlow]]">
+    &lt;/oj-vb-content>
+  &lt;/oj-drawer-layout>
+</pre>
+            </oj-collapsible>
+
+          </li>
+          <li>In the Components palette, drag a Navigation List component and drop it inside the div with slot
+            <code>start</code>, just below the div with class <code>oj-flex drawer-header</code>.
+          </li>
+          <li>Remove the auto-generated content (<code>ul</code> and <code>li</code> elements) from the navigation list.</li>
+          <li>In the General tab of the Properties pane for the Navigation List component, set the Drill Mode property
+            to <code>collapsible</code>, and set the id to <code>tree-navigation</code>.</li>
+        </ol>
+      </div>
+    </oj-collapsible>
+    <oj-collapsible id="step-3">
+      <h1 slot="header">Add Data for the Navigation List</h1>
+      <div>
+        <ol>
+          <li>In the shell page, create data in JSON format for the left navigation menu.
+            <p>
+              The JSON data consists of <code>label</code> and <code>icon</code> entries that describe the menu items
+              with optional <code>badge</code> text and flow <code>id</code> to navigate to.
+            </p>
+            <p>The following code adds an example menu structure to your shell page's JavaScript. </p>
+            <oj-collapsible id="expand-js">
+              <a slot="header" href="">Expand to view code</a>
+              <pre>
+  define(['knockout',
+  'ojs/ojknockout-keyset',
+  'ojs/ojarraytreedataprovider'
+], function (ko, keySet, ArrayTreeDataProvider) {
+  'use strict';
+
+  let navigationMenu = [
+    {
+      "id": "home",
+      "label": "Home",
+      "icon": "home",
+      "node": "parent"
+    },
+    {
+      "id": "gettingstarted",
+      "label": "Getting Started",
+      "icon": "education",
+      "node": "parent",
+      "items": [
+        {
+          "id": "download",
+          "label": "Download",
+          "icon": "download",
+          "badge": 13
+        },
+        {
+          "id": "quickstart",
+          "label": "Quick Start",
+          "icon": "clock"
+        }
+      ]
+    },
+    {
+      "id": "cookbook",
+      "label": "Cookbook",
+      "icon": "book",
+      "node": "parent",
+      "items": [
+        {
+          "id": "sample1",
+          "label": "Sample 1",
+          "icon": "list"
+        },
+        {
+          "id": "sample2",
+          "label": "Sample 2",
+          "icon": "form-layout",
+          "badge": "New"
+        }
+      ]
+    },
+    {
+      "id": "library",
+      "label": "Library",
+      "icon": "library",
+      "node": "parent",
+      "items": [
+        {
+          "id": "articles",
+          "label": "Articles",
+          "icon": "custom-article-header"
+        },
+        {
+          "id": "audios",
+          "label": "Audios",
+          "icon": "music"
+        },
+        {
+          "id": "videos",
+          "label": "Videos",
+          "icon": "video-block"
+        },
+        {
+          "id": "magazines",
+          "label": "Magazines",
+          "icon": "library-books"
+        }
+      ]
+    }
+  ];
+
+  var PageModule = function PageModule() {
+    this.metadata = {
+      navigationMenu: navigationMenu
+    };
+    PageModule.prototype.getMetadata = function () {
+      console.log(this.metadata);
+      return this.metadata;
+    };
+
+    PageModule.prototype.getNavigationContent = function (metadata) {
+      if (this.navigationContent === undefined) {
+        this.navigationContent = ko.observable(new ArrayTreeDataProvider(
+          this._getNavigationData(
+            metadata.navigationMenu), {
+          keyAttributes: 'attr.id'
+        }));
+      }
+      return this.navigationContent;
+    };
+
+    PageModule.prototype._getNavigationData = function (menu) {
+      var navData = [],
+        self = this;
+
+      for (var i = 0; i < menu.length; i++) {
+        var menuItem = {};
+        var origMenuItem = menu[i];
+        if (typeof origMenuItem === "object") {
+          menuItem["attr"] = {
+            "id": origMenuItem.id,
+            "name": origMenuItem.label,
+            "icon": origMenuItem.icon,
+            "badge": origMenuItem.badge,
+            "node": origMenuItem.node
+          };
+        }
+        if (origMenuItem.items && origMenuItem.items.length > 0)
+          menuItem["children"] = this._getNavigationData(origMenuItem.items);
+        navData.push(menuItem);
+      }
+      return navData;
+    };
+    
+    PageModule.prototype.itemSelectable = function (context) {
+      return context['leaf'];
+    };
+    this.navlistExpanded = new keySet.ObservableKeySet();
+  };
+  return PageModule;
+});
+
+              </pre>
+            </oj-collapsible>
+
+          </li>
+
+          <li>In the Navigation List component, reference the data as follows:
+            <p><code>data="[[ $functions.getNavigationContent($functions.getMetadata())]]"</code></p>
+          </li>
+          <li>In the Navigation List component, add a template with <code>slot="itemTemplate"</code> and
+            <code>data-oj-as="item"</code> in the navigation
+            list as follows:
+            <oj-collapsible id="expand-template">
+              <a href="" slot="header">Expand to view code</a>
+              <pre>
+&lt;template slot="itemTemplate" data-oj-as="item">
+  &lt;li>
+    &lt;a style="cursor: pointer">
+      &lt;oj-bind-if test="[[item.data.attr.node]]">
+        &lt;i :class="[[ 'oj-navigationlist-item-icon oj-ux-ico-' + (item.data.attr.icon ? item.data.attr.icon : 'box')]]">&lt;/i>
+        &lt;oj-bind-text value="[[item.data.attr.name]]">&lt;/oj-bind-text>
+      &lt;/oj-bind-if>
+      &lt;oj-bind-if test="[[!item.data.attr.node]]">
+        &lt;i :class="[[ 'oj-typography-body-md oj-navigationlist-item-icon oj-ux-ico-' + (item.data.attr.icon ? item.data.attr.icon : 'box') +  ' oj-sm-padding-4x-start']]">&lt;/i>
+        &lt;span class="oj-typography-body-md">
+        &lt;oj-bind-text value="[[item.data.attr.name]]">&lt;/oj-bind-text>
+        &lt;/span>
+      &lt;/oj-bind-if>
+      &lt;oj-bind-if test="[[item.data.attr.badge]]">
+        &lt;span class="oj-badge oj-navigationlist-item-end" style="color:aqua">&lt;oj-bind-text value="[[item.data.attr.badge]]">&lt;/oj-bind-text>&lt;/span>
+      &lt;/oj-bind-if>
+    &lt;/a>
+  &lt;/li>
+&lt;/template>
+</pre>
+            </oj-collapsible>
+          </li>
+          <li>In the Code view of the Page Designer, add the following property to the navigation list:
+            <p><code>item.selectable="[[ $page.functions.itemSelectable ]]"</code> </p>
+          </li>
+        </ol>
+      </div>
+    </oj-collapsible>
+
+    <oj-collapsible id="step-4">
+      <h1 slot="header">Add an Event and an Action Chain</h1>
+      <div>
+        <ol>
+          <li>In the Events tab of the Properties pane for the navigation list, add an On 'selection' event.</li>
+          <li>In the action chain, add an If action with the condition <code>[[ $application.responsive.lgUp ]]</code>.
+          </li>
+          <li>In the false branch of the If action, add an Assign Variable action and assign the
+            <code>!$page.variables.openDrawer</code>
+            value to the <code>openDrawer</code> page variable.
+          <p> This closes the drawer on selection of any navigation
+            menu item on small (sm) and medium (md) screen sizes.</p>
+          </li>
+          <li>
+            Add a Navigate action and, in the Properties pane, select <strong>Flow in Current Page</strong>, and set the
+            target to <code>[[ $variables.selection ]]</code>.
+          </li>
+        </ol>
+      </div>
+    </oj-collapsible>
+
+    <oj-collapsible id="step-5">
+      <h1 slot="header">Add the Required CSS</h1>
+      <div>
+        <ol>
+          <li>In the <code>app.css</code> file of your app, add the follow style classes:
+            <pre>
+.drawer-header {
+    padding: 0.3rem 1rem 0 1rem;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+.drawer-layout{
+    min-height: 100vh;
+  }</pre>
+          </li>
+        </ol>
+      </div>
+    </oj-collapsible>
+  </oj-accordion>
+</div>

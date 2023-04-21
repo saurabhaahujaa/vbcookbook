@@ -1,0 +1,40 @@
+{
+
+  "id": "cache-lov",
+  "description": "Flow main",
+  "defaultPage": "cache-lov-start",
+  "chains": {
+  },
+  "services": {},
+  "types": {
+    "@decorators.get_Country": {
+      "endpoint": "get_Country",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "get_Country": {
+      "countryCode": "string",
+      "countryName": "string",
+      "id": "number",
+      "region": "number"
+    }
+  },
+  "variables": {
+    "countryADP": {
+      "type": "vb/ArrayDataProvider2",
+      "defaultValue": {
+        "itemType": "get_Country",
+        "keyAttributes": "id",
+        "textFilterAttributes": [
+          "countryName"
+        ]
+      }
+    },
+    "countryADPInitialized": {
+      "type": "boolean",
+      "defaultValue": false
+    }
+  },
+  "eventListeners": {
+  }
+}

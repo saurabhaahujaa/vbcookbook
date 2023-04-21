@@ -1,0 +1,23 @@
+<!--
+ Copyright (c)2020, 2023, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+<!-- Contains Page Dynamic container templates -->
+<template id="formExample">
+  <h3>Form Example</h3>
+  <oj-bind-if test="[[ true ]]">
+    <oj-dyn-form metadata="[[ $page.metadata.businessObjectsGetEmployeeMetadata.provider ]]"
+      layout="formExampleLayout" value="{{ $variables.employee }}"
+      value-loading="[[ $variables.employeeDetailFormLoadingStatus ]]"
+      rendered-fields="{{ $variables.employeeDetailFormRenderedFields }}" :id="[['form-template']]"></oj-dyn-form>
+  </oj-bind-if>
+</template>
+<template id="tableExample">
+  <h3>Table Example</h3>
+  <oj-bind-if test="[[ true ]]">
+  <oj-dynamic-table data="[[$page.variables.employeeListSDP]]" class="oj-table-stretch oj-flex-item"
+    metadata="[[ $page.metadata.businessObjectsGetallEmployeeMetadata.provider ]]"
+    layout="tableExampleLayout" style="height:250px; width: 100%; " :id="[['table-template']]"></oj-dynamic-table>
+  </oj-bind-if>
+</template>

@@ -1,0 +1,208 @@
+{
+  "title": "CSV File Loading Recipe",
+  "description": "",
+  "variables": {
+    "boFormValid": {
+      "type": "string"
+    },
+    "boOp": {
+      "type": "string",
+      "defaultValue": "upsert"
+    },
+    "boOpModeOptionsDP": {
+      "type": "vb/ArrayDataProvider2",
+      "defaultValue": {
+        "data": [
+          {
+            "label": "Upsert",
+            "value": "upsert"
+          },
+          {
+            "label": "Create",
+            "value": "create"
+          }
+        ],
+        "itemType": "object",
+        "keyAttributes": "value"
+      }
+    },
+    "boPath": {
+      "type": "string",
+      "defaultValue": "/Employee"
+    },
+    "boPathOptionsDP": {
+      "type": "vb/ArrayDataProvider2",
+      "defaultValue": {
+        "data": [
+          {
+            "label": "Employee",
+            "value": "/Employee"
+          },
+          {
+            "label": "Country",
+            "value": "/Country"
+          },
+          {
+            "label": "Department",
+            "value": "/Department"
+          },
+          {
+            "label": "Skill",
+            "value": "/Skill"
+          },
+          {
+            "label": "Job",
+            "value": "/Job"
+          },
+          {
+            "label": "JobHistory",
+            "value": "/JobHistory"
+          },
+          {
+            "label": "Location",
+            "value": "/Location"
+          },
+          {
+            "label": "Region",
+            "value": "/Region"
+          }
+        ],
+        "itemType": "object",
+        "keyAttributes": "value"
+      }
+    },
+    "columns": {
+      "type": "object[]"
+    },
+    "current": {
+      "type": {
+        "hasfileLoaded": "boolean",
+        "name": "string",
+        "size": "number",
+        "type": "string"
+      },
+      "defaultValue": {
+        "size": 0
+      }
+    },
+    "error": {
+      "type": "any"
+    },
+    "isUploadingToBo": {
+      "type": "boolean"
+    },
+    "uploadDataADP": {
+      "type": "vb/ArrayDataProvider2",
+      "defaultValue": {
+        "itemType": "any",
+        "keyAttributes": [
+          "id"
+        ]
+      }
+    }
+  },
+  "metadata": {},
+  "types": {
+    "upload": {
+      "error": {
+        "detail": "string"
+      },
+      "result": {
+        "columns": "object[]",
+        "name": "string",
+        "size": "number",
+        "tableData": "object[]",
+        "type": "string"
+      },
+      "success": "boolean"
+    }
+  },
+  "chains": {},
+  "eventListeners": {
+    "ojButtonOjAction": {
+      "chains": [
+        {
+          "chainId": "BoConfigActionChain",
+          "parameters": {}
+        }
+      ]
+    },
+    "ojButtonOjAction2": {
+      "chains": [
+        {
+          "chainId": "ResetActionChain",
+          "parameters": {
+            "detail": "{{ $event.detail }}"
+          }
+        }
+      ]
+    },
+    "ojButtonOjAction3": {
+      "chains": [
+        {
+          "chainId": "GetSampleActionChain",
+          "parameters": {
+            "detail": "{{ $event.detail }}"
+          }
+        }
+      ]
+    },
+    "ojButtonOjAction4": {
+      "chains": [
+        {
+          "chainId": "ValidateAndUploadActionChain",
+          "parameters": {
+            "detail": "{{ $event.detail }}"
+          }
+        }
+      ]
+    },
+    "ojFilePickerOjSelect": {
+      "chains": [
+        {
+          "chainId": "FilePickerSelectChain",
+          "parameters": {
+            "files": "{{ $event.detail.files }}"
+          }
+        }
+      ]
+    }
+  },
+  "imports": {
+    "components": {
+      "oj-toolbar": {
+        "path": "ojs/ojtoolbar"
+      },
+      "oj-table": {
+        "path": "ojs/ojtable"
+      },
+      "oj-file-picker": {
+        "path": "ojs/ojfilepicker"
+      },
+      "oj-button": {
+        "path": "ojs/ojbutton"
+      },
+      "oj-message": {
+        "path": "ojs/ojmessage"
+      },
+      "oj-dialog": {
+        "path": "ojs/ojdialog"
+      },
+      "oj-form-layout": {
+        "path": "ojs/ojformlayout"
+      },
+      "oj-select-single": {
+        "path": "ojs/ojselectsingle"
+      },
+      "oj-validation-group": {
+        "path": "ojs/ojvalidationgroup"
+      },
+      "oj-progress-bar": {
+        "path": "ojs/ojprogress-bar"
+      },
+      "oj-text-area": {
+        "path": "ojs/ojinputtext"
+      }
+    }
+  }
+}

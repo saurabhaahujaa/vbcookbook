@@ -1,0 +1,39 @@
+{
+  "title": "Prevent Double Submission Recipe",
+  "description": "",
+  "variables": {
+    "buttonText": {
+      "type": "string",
+      "defaultValue": "Add"
+    },
+    "disableButton": {
+      "type": "boolean",
+      "defaultValue": false
+    }
+  },
+  "metadata": {},
+  "types": {},
+  "chains": {},
+  "eventListeners": {
+    "ojButton2830491771OjAction": {
+      "chains": [
+        {
+          "chainId": "ButtonActionChain",
+          "parameters": {
+            "detail": "{{ $event.detail }}"
+          }
+        }
+      ]
+    }
+  },
+  "imports": {
+    "components": {
+      "oj-input-text": {
+        "path": "ojs/ojinputtext"
+      },
+      "oj-button": {
+        "path": "ojs/ojbutton"
+      }
+    }
+  }
+}

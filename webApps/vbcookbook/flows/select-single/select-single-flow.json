@@ -1,0 +1,10 @@
+{
+
+  "id": "select-single",
+  "description": "Flow main",
+  "defaultPage": "select-single-start",
+  "chains": {},
+  "services": {},
+  "types": {},
+  "variables": {}
+}

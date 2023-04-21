@@ -1,0 +1,48 @@
+<!--
+ Copyright (c)2020, 2023, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+<div class="oj-sm-padding-2x oj-md-padding-8x recipe-desc">This demo allows you to switch between multiple languages and display content in the
+  newly-selected language.</div>
+<div class="oj-flex oj-md-margin-8x-start oj-md-margin-8x-end sample-box ">
+  <div class="oj-flex-item oj-sm-flex-direction-column sample-box2" style="overflow-x: auto">
+    <div class="oj-flex">
+      <h3 class="oj-flex-item oj-typography-heading-sm">Employees by Designation</h3>
+    </div>
+    <div class="oj-flex">
+      <div class="oj-flex-item oj-sm-margin-2x-bottom" style="overflow-x: auto">
+        <oj-film-strip max-items-per-page="1" current-item="{{ $variables.currentJob }}"
+          data-oj-context aria-label="filmstrip" id="filmstrip" style="width: 100%; max-width: 600px">
+          <oj-bind-for-each data="[[ $variables.jobs ]]">
+            <template data-oj-as="data">
+              <div class="oj-panel oj-sm-padding-4x" :style.width="[[ $application.responsive.smOnly ? '200px' : '400px' ]]">
+                  <span :class="[[ $application.responsive.smOnly ? 'oj-typography-body-md' : 'oj-typography-body-xl' ]]">
+                    <oj-bind-text value="[[ $current.data.title + 's' ]]"></oj-bind-text>
+                  </span>
+              </div>
+            </template>
+          </oj-bind-for-each>
+        </oj-film-strip>
+      </div>
+    </div>
+    <div class="oj-flex">
+      <oj-table style="max-height:50vh; width: 100%" scroll-policy="loadMoreOnScroll"
+        class="oj-flex-item oj-sm-12 oj-md-12"
+        columns='[{"headerText":"First Name","field":"firstName"},{"headerText":"Last Name","field":"lastName"},{"headerText":"Email","field":"email"}]'
+        data="[[ $variables.employeeListSDP ]]" id="table"></oj-table>
+    </div>
+  </div>
+
+  <oj-bind-if test="[[ $application.variables.isThisVBDesigner === false ]]">
+    <div class="oj-flex oj-sm-flex-1 oj-md-flex-1"
+      :style.min-width="[[ $application.responsive.smOnly ? '360px' : '500px' ]]">
+      <div class="recipe-box oj-bg-neutral-20 oj-flex-item">
+        <h1 class="oj-typography-heading-lg">Recipe</h1>
+        <div class="recipe-body oj-helper-overflow-wrap-anywhere">
+          <oj-vb-content config="[[ vbRouterFlow ]]" class="oj-flex-item oj-sm-12 oj-md-12"></oj-vb-content>
+        </div>
+      </div>
+    </div>
+  </oj-bind-if>
+</div>

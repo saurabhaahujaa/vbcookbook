@@ -1,0 +1,166 @@
+{
+  "title": "Select-Single Demos Recipe",
+  "description": "",
+  "variables": {
+    "departmentADP": {
+      "type": "vb/ArrayDataProvider2",
+      "defaultValue": {
+        "itemType": "getall_Department",
+        "textFilterAttributes": [
+          "departmentName"
+        ],
+        "keyAttributes": [
+          "id",
+          "departmentName"
+        ]
+      }
+    },
+    "departmentTDP": {
+      "type": "any"
+    },
+    "employeeListSDP": {
+      "type": "vb/ServiceDataProvider",
+      "defaultValue": {
+        "endpoint": "businessObjects/getall_Employee",
+        "keyAttributes": "id",
+        "itemsPath": "items",
+        "responseType": "page:getallEmployeeResponse",
+        "transformsContext": {
+          "vb-textFilterAttributes": [
+            "firstName",
+            "lastName"
+          ]
+        },
+        "uriParameters": {
+          "totalResults": true
+        }
+      }
+    },
+    "employeeListSDP2": {
+      "type": "vb/ServiceDataProvider",
+      "defaultValue": {
+        "endpoint": "businessObjects/getall_Employee",
+        "keyAttributes": "id",
+        "itemsPath": "items",
+        "responseType": "getallEmployeeResponse2",
+        "transformsContext": {
+          "vb-textFilterAttributes": [
+            "firstName",
+            "lastName",
+            "phoneNumber"
+          ]
+        },
+        "transforms": {
+          "request": {
+            "filter": "{{ $functions.processFilter }}"
+          }
+        }
+      }
+    },
+    "groupingDept": {
+      "type": "obj[]"
+    },
+    "selectedEmployee": {
+      "type": "selectedObjectType"
+    },
+    "selectedEmployee2": {
+      "type": "selectedObjectType"
+    }
+  },
+  "metadata": {},
+  "types": {
+    "@decorators.getall_Department": {
+      "endpoint": "getall_Department",
+      "service": "businessObjects",
+      "path": "response-_-items[0]"
+    },
+    "@decorators.getallEmployeeResponse": {
+      "endpoint": "getall_Employee",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "@decorators.getallEmployeeResponse2": {
+      "endpoint": "getall_Employee",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "childobj": {
+      "label": "string",
+      "value": "number"
+    },
+    "getall_Department": {
+      "departmentName": "string",
+      "id": "number"
+    },
+    "getallEmployeeResponse": {
+      "items": [
+        {
+          "email": "string",
+          "firstName": "string",
+          "hireDate": "string",
+          "id": "number",
+          "lastName": "string",
+          "phoneNumber": "string",
+          "salary": "number"
+        }
+      ]
+    },
+    "getallEmployeeResponse2": {
+      "items": [
+        {
+          "firstName": "string",
+          "id": "number",
+          "lastName": "string",
+          "phoneNumber": "string"
+        }
+      ]
+    },
+    "obj": {
+      "children": "childobj[]",
+      "label": "string",
+      "value": "number"
+    },
+    "selectedObjectType": {
+      "data": "object",
+      "key": "number",
+      "metadata": "object"
+    }
+  },
+  "chains": {},
+  "eventListeners": {
+    "vbEnter": {
+      "chains": [
+        {
+          "chainId": "GetDeptData",
+          "parameters": {}
+        },
+        {
+          "chainId": "GetDeptMultipleSuggestionGroupsData",
+          "parameters": {}
+        }
+      ]
+    }
+  },
+  "imports": {
+    "components": {
+      "oj-form-layout": {
+        "path": "ojs/ojformlayout"
+      },
+      "oj-select-single": {
+        "path": "ojs/ojselectsingle"
+      },
+      "oj-button": {
+        "path": "ojs/ojbutton"
+      },
+      "oj-label": {
+        "path": "ojs/ojlabel"
+      },
+      "oj-table": {
+        "path": "ojs/ojtable"
+      },
+      "oj-text-area": {
+        "path": "ojs/ojinputtext"
+      }
+    }
+  }
+}

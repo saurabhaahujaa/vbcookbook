@@ -1,0 +1,101 @@
+{
+  "title": "Table Row Expander Recipe",
+  "description": "",
+  "variables": {
+    "employee": {
+      "type": "get_Employee[]"
+    }
+  },
+  "metadata": {},
+  "types": {
+    "@decorators.getall_Employee": {
+      "endpoint": "getall_Employee",
+      "service": "businessObjects",
+      "path": "response"
+    },
+    "get_Employee": {
+      "firstName": "string",
+      "id": "number",
+      "job": "number",
+      "jobObject": {
+        "items": [
+          {
+            "jobTitle": "string"
+          }
+        ]
+      },
+      "lastName": "string",
+      "manager": "number",
+      "phoneNumber": "string",
+      "salary": "number"
+    },
+    "getall_Employee": {
+      "items": [
+        {
+          "firstName": "string",
+          "id": "number",
+          "job": "number",
+          "jobObject": {
+            "items": [
+              {
+                "jobTitle": "string"
+              }
+            ]
+          },
+          "lastName": "string",
+          "manager": "number",
+          "phoneNumber": "string",
+          "salary": "number"
+        }
+      ]
+    }
+  },
+  "chains": {},
+  "eventListeners": {
+    "vbEnter": {
+      "chains": [
+        {
+          "chainId": "fetchEmployees",
+          "parameters": {}
+        }
+      ]
+    },
+    "anchorClick": {
+      "chains": [
+        {
+          "chainId": "callEmployee",
+          "parameters": {
+            "key": "{{ $current.key }}",
+            "index": "{{ $current.index }}",
+            "current": "{{ $current }}"
+          }
+        }
+      ]
+    }
+  },
+  "imports": {
+    "components": {
+      "oj-accordion": {
+        "path": "ojs/ojaccordion"
+      },
+      "oj-collapsible": {
+        "path": "ojs/ojcollapsible"
+      },
+      "oj-row-expander": {
+        "path": "ojs/ojrowexpander"
+      },
+      "oj-table": {
+        "path": "ojs/ojtable"
+      },
+      "oj-rowexpander": {
+        "path": "ojs/ojrowexpander"
+      },
+      "oj-toolbar": {
+        "path": "ojs/ojtoolbar"
+      },
+      "oj-button": {
+        "path": "ojs/ojbutton"
+      }
+    }
+  }
+}
